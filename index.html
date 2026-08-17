@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>村鯖 - 公式ホームページ</title>
+    <style>
+        /* 全体のスタイル設定 */
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* ヘッダーのスタイル */
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+        header p {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* コンテンツ領域のスタイル */
+        .container {
+            max-width: 800px;
+            margin: -2rem auto 2rem;
+            padding: 0 1rem;
+        }
+        
+        /* 各セクションのカードデザイン */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* サーバーIPのハイライト部分 */
+        .ip-box {
+            background-color: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            padding: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: #27ae60;
+            user-select: all; /* クリックで全選択できるようにする設定 */
+        }
+        
+        /* Discordボタンのスタイル */
+        .btn-discord {
+            display: inline-block;
+            background-color: #5865F2; /* Discordのブランドカラー */
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(88, 101, 242, 0.3);
+        }
+        .btn-discord:hover {
+            background-color: #4752c4;
+            transform: translateY(-2px);
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #2c3e50;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <h1>村鯖</h1>
+        <p>みんなで楽しむマルチプレイサーバー！</p>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        
+        <!-- サーバー情報セクション -->
+        <div class="card">
+            <h2>サーバーに参加する</h2>
+            <p>以下のIPアドレスをコピーして、ゲーム内の「サーバーを追加」から接続してください。</p>
+            
+            <div class="ip-box">village-s.ddns.net</div>
+            
+            <p style="color: #7f8c8d; font-size: 0.9rem;">
+                ※対応バージョン: 最新版（Java版）<br>
+                <!-- 必要に応じて上記テキストを変更してください -->
+            </p>
+        </div>
+
+        <!-- Discordセクション -->
+        <div class="card">
+            <h2>コミュニティに参加する</h2>
+            <p>最新情報の確認や、プレイヤー同士の交流はDiscordで行っています。<br>サーバーに参加する前に、必ずルールをご確認ください。</p>
+            <br>
+            <a href="https://discord.gg/2qPETeMwcj" class="btn-discord" target="_blank" rel="noopener noreferrer">
+                Discordサーバーに参加
+            </a>
+        </div>
+        
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        &copy; 2026 村鯖 All Rights Reserved.
+    </footer>
+
+</body>
+</html>

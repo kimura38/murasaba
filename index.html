@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村鯖 | OFFICIAL WEBSITE</title>
-    <!-- かっこいいアイコンを読み込むための設定 -->
+    <title>村鯖 | 公式サイト</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 全体の設定 (ダークテーマ) */
+        /* 全体の設定 */
         :root {
-            --bg-base: #0f172a;       /* 深いネイビー/黒 */
-            --bg-card: #1e293b;       /* カードの背景色 */
-            --accent: #10b981;        /* アクセントのグリーン */
-            --accent-hover: #059669;
-            --text-main: #f8fafc;     /* 白に近いグレー */
-            --text-muted: #94a3b8;    /* 暗めのグレー */
+            --bg-base: #0f172a;
+            --bg-card: #1e293b;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --border-color: #334155;
             --discord: #5865F2;
+        }
+
+        html {
+            scroll-behavior: smooth; /* メニューからの移動をなめらかに */
         }
 
         body {
@@ -28,32 +30,107 @@
             line-height: 1.6;
         }
 
+        /* ヘッダー・ナビゲーションバー */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        /* ハンバーガーメニューのアイコン */
+        .menu-btn {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .menu-btn:hover {
+            color: var(--accent);
+        }
+
+        /* サイドメニュー */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px; /* 初期状態は画面外 */
+            width: 250px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding-top: 5rem;
+        }
+        .side-menu.active {
+            right: 0; /* クラス付与でスライドイン */
+        }
+        .side-menu a {
+            display: block;
+            padding: 1.2rem 2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s, padding-left 0.2s;
+        }
+        .side-menu a:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding-left: 2.5rem;
+        }
+        /* メニューを閉じるボタン */
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: var(--text-main);
+        }
+
         /* ヒーローセクション */
         .hero {
-            padding: 8rem 1rem 5rem;
+            padding: 10rem 1rem 6rem;
             text-align: center;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             border-bottom: 1px solid var(--border-color);
         }
-        
-        /* タイトルのグラデーション文字 */
         .hero h1 {
             font-size: 4rem;
             margin: 0;
-            letter-spacing: 6px;
+            letter-spacing: 8px;
             background: linear-gradient(to right, #10b981, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
         }
-        
         .hero p {
             font-size: 1.1rem;
             color: var(--text-muted);
             margin-top: 1.5rem;
             letter-spacing: 1px;
         }
-        
         .tag {
             display: inline-flex;
             align-items: center;
@@ -75,27 +152,31 @@
             margin: 0 auto;
             padding: 4rem 1rem;
         }
-
+        .section-wrapper {
+            margin-bottom: 6rem;
+            padding-top: 4rem; /* スクロール時のヘッダー被り防止 */
+            margin-top: -4rem;
+        }
         .section-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--text-main);
             margin-bottom: 2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
         }
 
-        /* サーバーIPの表示エリア (ターミナル風) */
+        /* サーバー情報エリア */
         .server-info-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 3rem;
             text-align: center;
-            margin-bottom: 4rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
         .ip-box {
             display: flex;
             align-items: center;
@@ -111,11 +192,7 @@
             margin: 2rem auto;
             max-width: 600px;
         }
-
-        .ip-box span {
-            color: var(--accent);
-        }
-
+        .ip-box span { color: var(--accent); }
         .copy-btn {
             background: var(--border-color);
             color: var(--text-main);
@@ -130,68 +207,85 @@
             gap: 8px;
             font-weight: bold;
         }
-
         .copy-btn:hover {
             background: var(--text-muted);
             color: var(--bg-base);
         }
 
-        .version-info {
+        /* 活動内容エリア */
+        .activity-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .activity-item {
+            margin-bottom: 2rem;
+        }
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+        .activity-item h3 {
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-top: 0;
             display: flex;
-            justify-content: center;
-            gap: 2rem;
+            align-items: center;
+            gap: 10px;
+        }
+        .activity-item p {
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 1.5rem;
+            line-height: 1.8;
         }
 
-        /* リンクカードグリッド */
+        /* リンク一覧グリッド */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
-
         .tool-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
             text-decoration: none;
             color: var(--text-main);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
         }
-
         .tool-card:hover {
             transform: translateY(-5px);
             border-color: var(--text-muted);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-
-        /* カード上部のアイコン */
         .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
         .icon-discord { color: var(--discord); }
         .icon-chat { color: #f59e0b; }
         .icon-status { color: #3b82f6; }
-
+        .icon-bot { color: #9b59b6; }
+        
         .tool-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
-
         .tool-desc {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.5;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
         }
-
         .card-link {
             font-size: 0.9rem;
             font-weight: bold;
@@ -200,10 +294,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--text-muted);
         }
-        .link-discord { color: var(--discord); }
-        .link-chat { color: #f59e0b; }
-        .link-status { color: #3b82f6; }
+        .tool-card:hover .card-link { color: var(--text-main); }
 
         /* フッター */
         footer {
@@ -218,88 +311,133 @@
 </head>
 <body>
 
+    <!-- ナビゲーションバー -->
+    <nav class="navbar">
+        <a href="#" class="navbar-logo">村鯖</a>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- スライドメニュー -->
+    <div class="side-menu" id="sideMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a href="#mc-server" onclick="toggleMenu()"><i class="fa-solid fa-server"></i> マイクラサーバー</a>
+        <a href="#activity" onclick="toggleMenu()"><i class="fa-solid fa-code"></i> 活動内容</a>
+        <a href="#links" onclick="toggleMenu()"><i class="fa-solid fa-link"></i> リンク一覧</a>
+    </div>
+
     <!-- ヒーローセクション -->
     <header class="hero">
-        <div class="tag"><i class="fa-solid fa-gamepad"></i> CROSSPLAY SUPPORTED</div>
-        <h1>MURASABA</h1>
-        <p>Java Edition & Bedrock Edition | Multiplayer Server</p>
+        <div class="tag"><i class="fa-solid fa-gamepad"></i> クロスプレイ対応</div>
+        <h1>村鯖</h1>
+        <p>Java版 ＆ 統合版 | マルチプレイサーバー</p>
     </header>
 
     <!-- メインコンテンツ -->
     <main class="container">
         
-        <!-- サーバー情報 -->
-        <section class="server-info-card">
-            <h2 class="section-title" style="justify-content: center;">
-                <i class="fa-solid fa-server"></i> JOIN THE SERVER
-            </h2>
-            <p style="color: var(--text-muted);">以下のIPアドレスをコピーしてゲーム内から接続してください</p>
-            
-            <div class="ip-box">
-                <i class="fa-solid fa-terminal" style="color: #334155;"></i>
-                <span>village-s.ddns.net</span>
-                <button class="copy-btn" id="copyBtn" onclick="copyIP()">
-                    <i class="fa-regular fa-copy"></i> COPY
-                </button>
-            </div>
+        <!-- マイクラサーバー -->
+        <section id="mc-server" class="section-wrapper">
+            <h2 class="section-title"><i class="fa-solid fa-server"></i> マイクラサーバー</h2>
+            <div class="server-info-card">
+                <p style="color: var(--text-muted);">以下のIPアドレスをコピーしてゲーム内から接続してください</p>
+                
+                <div class="ip-box">
+                    <i class="fa-solid fa-terminal" style="color: #334155;"></i>
+                    <span>village-s.ddns.net</span>
+                    <button class="copy-btn" id="copyBtn" onclick="copyIP()">
+                        <i class="fa-regular fa-copy"></i> コピー
+                    </button>
+                </div>
 
-            <div class="version-info">
-                <div><i class="fa-brands fa-java"></i> Java版: そのまま接続</div>
-                <div><i class="fa-solid fa-mobile-screen-button"></i> 統合版: ポート 19132</div>
+                <div style="display: flex; justify-content: center; gap: 2rem; color: var(--text-muted); font-size: 0.9rem; margin-top: 1.5rem;">
+                    <div><i class="fa-brands fa-java"></i> Java版: そのまま接続</div>
+                    <div><i class="fa-solid fa-mobile-screen-button"></i> 統合版: ポート 19132</div>
+                </div>
             </div>
         </section>
 
-        <!-- ツール＆リンク -->
-        <h2 class="section-title"><i class="fa-solid fa-link"></i> COMMUNITY & TOOLS</h2>
-        <div class="links-grid">
-            
-            <!-- Discord -->
-            <a href="https://discord.gg/2qPETeMwcj" class="tool-card" target="_blank" rel="noopener noreferrer">
-                <div class="card-icon icon-discord"><i class="fa-brands fa-discord"></i></div>
-                <div class="tool-title">Official Discord</div>
-                <div class="tool-desc">サーバーのルール確認や最新情報、プレイヤー同士のボイスチャット・交流はこちらから。参加必須です。</div>
-                <div class="card-link link-discord">Join Discord <i class="fa-solid fa-arrow-right"></i></div>
-            </a>
+        <!-- 活動内容 -->
+        <section id="activity" class="section-wrapper">
+            <h2 class="section-title"><i class="fa-solid fa-hammer"></i> 活動内容</h2>
+            <div class="activity-content">
+                <div class="activity-item">
+                    <h3><i class="fa-solid fa-puzzle-piece"></i> サーバープラグインの自作</h3>
+                    <p>村鯖をより面白く、独自の環境にするために、サーバー専用のオリジナルプラグインを開発・導入しています。プレイヤーの利便性を高める機能や、ここでしか遊べない要素を追加しています。</p>
+                </div>
+                <div class="activity-item">
+                    <h3><i class="fa-solid fa-laptop-code"></i> サイト・システムの開発</h3>
+                    <p>この公式サイトをはじめ、ブラウザからゲーム内のDiscordチャットにアクセスできる「Webチャット」や、リアルタイムの「サーバーステータス確認」など、ゲーム外からでもサーバーを楽しめるWebシステムの開発に力を入れています。</p>
+                </div>
+            </div>
+        </section>
 
-            <!-- Webチャット -->
-            <a href="https://discord-pied-pi.vercel.app/" class="tool-card" target="_blank" rel="noopener noreferrer">
-                <div class="card-icon icon-chat"><i class="fa-solid fa-comments"></i></div>
-                <div class="tool-title">Web Chat</div>
-                <div class="tool-desc">ブラウザから直接村鯖のチャットを確認・発言できる連携ツール。ゲーム外からでも会話に参加できます。</div>
-                <div class="card-link link-chat">Open Chat <i class="fa-solid fa-arrow-right"></i></div>
-            </a>
+        <!-- リンク一覧 -->
+        <section id="links" class="section-wrapper">
+            <h2 class="section-title"><i class="fa-solid fa-link"></i> リンク一覧</h2>
+            <div class="links-grid">
+                
+                <!-- Discord -->
+                <a href="https://discord.gg/2qPETeMwcj" class="tool-card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon icon-discord"><i class="fa-brands fa-discord"></i></div>
+                    <div class="tool-title">公式Discord</div>
+                    <div class="tool-desc">ルールの確認、最新情報、プレイヤー同士の交流はこちら。参加必須です。</div>
+                    <div class="card-link">参加する <i class="fa-solid fa-arrow-right"></i></div>
+                </a>
 
-            <!-- サーバーステータス -->
-            <a href="https://kimura38.github.io/mc-village-server/" class="tool-card" target="_blank" rel="noopener noreferrer">
-                <div class="card-icon icon-status"><i class="fa-solid fa-chart-line"></i></div>
-                <div class="tool-title">Server Status</div>
-                <div class="tool-desc">現在のサーバー稼働状況や、オンラインのプレイヤー人数をリアルタイムでモニタリングできます。</div>
-                <div class="card-link link-status">View Status <i class="fa-solid fa-arrow-right"></i></div>
-            </a>
+                <!-- Webチャット -->
+                <a href="https://discord-pied-pi.vercel.app/" class="tool-card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon icon-chat"><i class="fa-solid fa-comments"></i></div>
+                    <div class="tool-title">Webチャット</div>
+                    <div class="tool-desc">ブラウザから直接村鯖のチャットを確認・発言できる便利な連携ツールです。</div>
+                    <div class="card-link">開く <i class="fa-solid fa-arrow-right"></i></div>
+                </a>
 
-        </div>
+                <!-- サーバーステータス -->
+                <a href="https://kimura38.github.io/mc-village-server/" class="tool-card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon icon-status"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="tool-title">サーバーステータス</div>
+                    <div class="tool-desc">サーバーの稼働状況や、オンライン人数をリアルタイムで確認できます。</div>
+                    <div class="card-link">確認する <i class="fa-solid fa-arrow-right"></i></div>
+                </a>
+
+                <!-- 自作Discordボット -->
+                <a href="https://discord.com/oauth2/authorize?client_id=1538733788228747416&permissio" class="tool-card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon icon-bot"><i class="fa-solid fa-robot"></i></div>
+                    <div class="tool-title">自作Discordボット</div>
+                    <div class="tool-desc">サーバー運営を便利にするために自作したオリジナルBotです。あなたのサーバーにも導入可能です。</div>
+                    <div class="card-link">導入する <i class="fa-solid fa-arrow-right"></i></div>
+                </a>
+
+            </div>
+        </section>
     </main>
 
     <!-- フッター -->
     <footer>
-        &copy; 2026 MURASABA. All Rights Reserved.<br>
+        &copy; 2026 村鯖. All Rights Reserved.<br>
         Not an official Minecraft product.
     </footer>
 
-    <!-- IPコピースクリプト -->
+    <!-- スクリプト (IPコピー ＆ メニュー動作) -->
     <script>
+        // メニューの開閉機能
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.toggle("active");
+        }
+
+        // IPコピースクリプト
         function copyIP() {
             const ip = "village-s.ddns.net";
             navigator.clipboard.writeText(ip).then(() => {
                 const btn = document.getElementById("copyBtn");
                 const originalContent = btn.innerHTML;
                 
-                // コピー成功時の表示切り替え
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> COPIED!';
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> コピー完了';
                 btn.style.background = "var(--accent)";
                 btn.style.color = "#fff";
                 
-                // 2秒後に元に戻す
                 setTimeout(() => {
                     btn.innerHTML = originalContent;
                     btn.style.background = "";

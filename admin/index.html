@@ -3,38 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村鯖 | 管理画面</title>
+    <title>村鯖 | 公式サイト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; padding: 2rem; background: #f4f7f6; color: #333; }
-        .admin-box { background: #fff; padding: 2rem; border-radius: 8px; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 0 auto; }
-        label { display: block; margin-top: 1.5rem; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 0.8rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        input[type="color"] { margin-top: 0.5rem; }
-        button { margin-top: 2rem; padding: 1rem 2rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
-        button:hover { background: #059669; }
+        /* =========================================
+           基本設定 (ダークテーマ)
+        ========================================= */
+        :root {
+            --bg-base: #0f172a;
+            --bg-card: #1e293b;
+            --accent: #10b981;
+            --text-main: #f8fafc; /* 管理画面からこの色が上書きされます */
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --discord: #5865F2;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           ナビゲーション ＆ メニュー
+        ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+        .menu-btn {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .menu-btn:hover { color: var(--accent); }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding-top: 5rem;
+        }
+        .side-menu.active { right: 0; }
+        .side-menu a {
+            display: block;
+            padding: 1.2rem 2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s, padding-left 0.2s;
+            cursor: pointer;
+        }
+        .side-menu a:hover, .side-menu a.current {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding-left: 2.5rem;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .close-btn:hover { color: var(--text-main); }
+
+        /* =========================================
+           タブ制御用クラス
+        ========================================= */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* コンテンツエリア共通 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 7rem 1rem 4rem;
+            min-height: calc(100vh - 100px);
+        }
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        /* =========================================
+           ホームタブ (解説・お知らせ)
+        ========================================= */
+        .hero {
+            text-align: center;
+            padding: 2rem 0 3rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem; /* 管理画面から上書き可能です */
+            margin: 0;
+            letter-spacing: 8px;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            transition: font-size 0.3s ease;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .about-box {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .news-container {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+        }
+        .news-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .news-item:last-child { border-bottom: none; }
+        .news-date {
+            color: var(--accent);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* =========================================
+           ルールタブ
+        ========================================= */
+        .rules-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .rules-wrapper h3 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            margin-top: 0;
+        }
+        .rules-wrapper h4 {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+        .rules-list {
+            padding-left: 1.5rem;
+            color: var(--text-muted);
+        }
+        .rules-list li { margin-bottom: 0.5rem; }
+        .warning-text {
+            color: #ef4444;
+            font-weight: bold;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* =========================================
+           リンク一覧 (縦1列リスト型)
+        ========================================= */
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .list-card {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        .list-card:hover {
+            transform: translateX(10px);
+            border-color: var(--accent);
+            background: rgba(30, 41, 59, 0.8);
+        }
+        .list-icon {
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            width: 50px;
+            text-align: center;
+        }
+        .list-content { flex-grow: 1; }
+        .list-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        .list-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .list-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+        .list-card:hover .list-arrow { color: var(--text-main); }
+
+        .c-discord { color: var(--discord); }
+        .c-chat { color: #f59e0b; }
+        .c-status { color: #3b82f6; }
+        .c-bot { color: #9b59b6; }
+
+        /* =========================================
+           その他
+        ========================================= */
+        .ip-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: #000;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.8rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        .copy-btn {
+            background: var(--border-color);
+            color: var(--text-main);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: var(--bg-card);
+        }
     </style>
 </head>
 <body>
-    <div class="admin-box">
-        <h2>⚙️ サイト管理画面</h2>
-        <p>ここで保存した内容が公式サイトにリアルタイムで反映されます。</p>
-        
-        <label>サイト全体の文字色 (デフォルト: #f8fafc)</label>
-        <input type="color" id="textColor" value="#f8fafc">
-        
-        <label>タイトルの大きさ (例: 4rem, 50px など)</label>
-        <input type="text" id="titleSize" placeholder="4rem">
-        
-        <label>最新のお知らせテキスト</label>
-        <textarea id="newsText" rows="4" placeholder="ここにお知らせを入力してください"></textarea>
-        
-        <button id="saveBtn">保存して反映する</button>
+
+    <!-- ナビゲーションバー -->
+    <nav class="navbar">
+        <a onclick="switchTab('tab-home')" class="navbar-logo">村鯖</a>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- スライドメニュー -->
+    <div class="side-menu" id="sideMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a onclick="switchTab('tab-home')"><i class="fa-solid fa-house"></i> ホーム</a>
+        <a onclick="switchTab('tab-server')"><i class="fa-solid fa-server"></i> サーバー参加</a>
+        <a onclick="switchTab('tab-rules')"><i class="fa-solid fa-book"></i> ルール</a>
+        <a onclick="switchTab('tab-activity')"><i class="fa-solid fa-code"></i> 活動内容</a>
+        <a onclick="switchTab('tab-links')"><i class="fa-solid fa-link"></i> リンク一覧</a>
     </div>
 
-    <!-- Firebaseの読み込み (※確実な動作のため安定版v10を指定しています) -->
+    <!-- コンテンツエリア -->
+    <main class="container">
+
+        <!-- =====================================
+             1. ホーム タブ
+        ====================================== -->
+        <section id="tab-home" class="tab-content active">
+            <div class="hero">
+                <div style="display: inline-block; background: rgba(16,185,129,0.1); color: var(--accent); padding: 0.4rem 1.2rem; border-radius: 50px; font-weight: bold; margin-bottom: 1rem; border: 1px solid var(--accent);">
+                    <i class="fa-solid fa-gamepad"></i> クロスプレイ対応
+                </div>
+                <h1>村鯖</h1>
+                <p>Java版 ＆ 統合版 | マルチプレイサーバー</p>
+            </div>
+
+            <!-- サーバー解説 -->
+            <div class="about-box">
+                <h2>当サーバーについて</h2>
+                <p style="color: var(--text-muted); line-height: 1.8;">
+                    村鯖は、Java版と統合版（スマホ・Switchなど）のプレイヤーが一緒に遊べるクロスプレイ対応のマルチサーバーです。<br>
+                    独自の自作プラグインや便利なWebシステムを導入し、快適で楽しい環境を提供しています。<br>
+                    初めての方も大歓迎！ぜひコミュニティに参加して、一緒に村鯖を作り上げましょう。
+                </p>
+            </div>
+
+            <!-- お知らせ機能 -->
+            <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> 最新のお知らせ</h2>
+            <div class="news-container">
+                <div class="news-item">
+                    <div class="news-date">最新</div>
+                    <!-- 管理画面から書き換わるテキスト (id="dynamic-news-text") -->
+                    <div class="news-text" id="dynamic-news-text">（データを読み込み中...）</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================
+             2. サーバー参加 タブ
+        ====================================== -->
+        <section id="tab-server" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-server"></i> サーバーに参加する</h2>
+            <div class="about-box">
+                <p style="color: var(--text-muted);">以下のIPアドレスをコピーしてゲーム内から接続してください</p>
+                <div class="ip-box">
+                    <i class="fa-solid fa-terminal" style="color: #334155;"></i>
+                    <span style="color: var(--accent);">village-s.ddns.net</span>
+                    <button class="copy-btn" id="copyBtn" onclick="copyIP()">
+                        <i class="fa-regular fa-copy"></i> コピー
+                    </button>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 2rem; color: var(--text-muted); margin-top: 1.5rem;">
+                    <div><i class="fa-brands fa-java"></i> Java版: そのまま接続</div>
+                    <div><i class="fa-solid fa-mobile-screen-button"></i> 統合版: ポート 19132</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================
+             3. ルール タブ
+        ====================================== -->
+        <section id="tab-rules" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-book"></i> ルール</h2>
+            
+            <div class="warning-text" style="text-align: center; margin-bottom: 2rem;">
+                <i class="fa-solid fa-triangle-exclamation"></i> 「ルールを読んでいなかった」は理由になりません。<br>必ず確認してから参加してください。
+            </div>
+
+            <!-- マイクラルール -->
+            <div class="rules-wrapper">
+                <h3><i class="fa-solid fa-cube"></i> サーバールール (Minecraft)</h3>
+                <h4>- 禁止事項 -</h4>
+                <ol class="rules-list">
+                    <li>荒らし行為・チート・不正行為は禁止です。</li>
+                    <li>他のプレイヤーへの迷惑行為、誹謗中傷、暴言、不適切なチャットは禁止です。</li>
+                    <li>他サーバーの宣伝や勧誘、サーバー名を出して宣伝する行為は禁止です。</li>
+                    <li>バグや不具合を悪用する行為は禁止です。見つけた場合は運営までご報告ください。</li>
+                    <li>無限増殖は禁止です。（※TNTの無限増殖は許可、エリトラ・アイテムなどの無限増殖は禁止）</li>
+                    <li>他のプレイヤーへの嫌がらせや、運営の妨害行為は禁止です。</li>
+                    <li>一般的なマナーや常識を守ってプレイしてください。</li>
+                    <li>PvPで相手のアイテムを奪うことは禁止です。PvP後に相手のアイテムを拾った場合は返却してください。</li>
+                    <li>運営の指示には従ってください。従わない場合は処罰の対象となることがあります。</li>
+                    <li>ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</li>
+                </ol>
+
+                <h4>- 荒らしの報告方法 -</h4>
+                <p class="rules-list">Discordでのプレイヤー報告欄、又は直接主にお問い合わせください。</p>
+
+                <h4>- 荒らされた場合 -</h4>
+                <ul class="rules-list">
+                    <li>荒らされた場合は運営が荒らされた時刻をもとに、その範囲をバックアップしデータを復元します。</li>
+                    <li>確かな情報がない場合、バックアップが行えない場合があります。</li>
+                    <li>また、土地保護をつけていなかった場合は責任を負いかねる場合がありますのでご了承ください。</li>
+                </ul>
+            </div>
+
+            <!-- Discordルール -->
+            <div class="rules-wrapper">
+                <h3><i class="fa-brands fa-discord"></i> Discordルール</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">このサーバーを利用するすべてのメンバーは、以下のルールを守ってください。</p>
+                <h4>- 禁止事項 -</h4>
+                <ol class="rules-list">
+                    <li>荒らし行為・スパム・連投は禁止です。</li>
+                    <li>暴言・誹謗中傷・差別・脅迫・ハラスメントは禁止です。</li>
+                    <li>政治・宗教に関する過度な発言や勧誘は禁止です。</li>
+                    <li>Discord利用規約に違反する行為は禁止です。</li>
+                    <li>無断で当サーバーを模倣・コピーする行為は禁止です。</li>
+                    <li>everyoneやhereなどの不要なメンションは禁止です。</li>
+                    <li>DMでの宣伝・勧誘・引き抜き行為は禁止です。</li>
+                    <li>ショップサーバー・荒らしサーバー・アフィリエイト・金銭目的の宣伝は禁止です。</li>
+                    <li>NSFWコンテンツの投稿は禁止です。</li>
+                    <li>一般的なマナーや常識を守って参加してください。</li>
+                    <li>運営の指示には従ってください。従わない場合は処罰の対象となることがあります。</li>
+                    <li>ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</li>
+                </ol>
+            </div>
+
+            <!-- 違反対応 -->
+            <div class="rules-wrapper" style="border-color: #ef4444;">
+                <h3 style="color: #ef4444; border-left-color: #ef4444;"><i class="fa-solid fa-gavel"></i> 違反対応について</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">ルール違反を確認した場合、基本的に以下の対応を行います。</p>
+                <ul class="rules-list" style="font-weight: bold; color: var(--text-main);">
+                    <li>1回目：キック</li>
+                    <li>2回目：BAN（永久追放）</li>
+                </ul>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem;">
+                    ※違反内容によっては、上記の処分を行わず即BANとなる場合があります。
+                </p>
+            </div>
+        </section>
+
+        <!-- =====================================
+             4. 活動内容 タブ
+        ====================================== -->
+        <section id="tab-activity" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-hammer"></i> 活動内容</h2>
+            <div class="about-box" style="text-align: left;">
+                <h3 style="color: var(--accent); margin-top: 0;"><i class="fa-solid fa-puzzle-piece"></i> サーバープラグインの自作</h3>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">村鯖をより面白く、独自の環境にするために、サーバー専用のオリジナルプラグインを開発・導入しています。プレイヤーの利便性を高める機能や、ここでしか遊べない要素を追加しています。</p>
+
+                <h3 style="color: var(--accent);"><i class="fa-solid fa-laptop-code"></i> サイト・システムの開発</h3>
+                <p style="color: var(--text-muted);">この公式サイトをはじめ、ブラウザからゲーム内のDiscordチャットにアクセスできる「Webチャット」や、リアルタイムの「サーバーステータス確認」など、ゲーム外からでもサーバーを楽しめるWebシステムの開発に力を入れています。</p>
+            </div>
+        </section>
+
+        <!-- =====================================
+             5. リンク一覧 タブ
+        ====================================== -->
+        <section id="tab-links" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-link"></i> リンク一覧</h2>
+            <div class="links-list">
+                <!-- Discord -->
+                <a href="https://discord.gg/2qPETeMwcj" class="list-card" target="_blank" rel="noopener noreferrer">
+                    <div class="list-icon c-discord"><i class="fa-brands fa-discord"></i></div>
+                    <div class="list-content">
+                        <div class="list-title">公式Discord</div>
+                        <div class="list-desc">ルールの確認、最新情報、プレイヤー同士の交流はこちら。参加必須です。</div>
+                    </div>
+                    <div class="list-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <!-- Webチャット -->
+                <a href="https://discord-pied-pi.vercel.app/" class="list-card" target="_blank" rel="noopener noreferrer">
+                    <div class="list-icon c-chat"><i class="fa-solid fa-comments"></i></div>
+                    <div class="list-content">
+                        <div class="list-title">Webチャット</div>
+                        <div class="list-desc">ブラウザから直接村鯖のチャットを確認・発言できる便利な連携ツールです。</div>
+                    </div>
+                    <div class="list-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <!-- サーバーステータス -->
+                <a href="https://kimura38.github.io/mc-village-server/" class="list-card" target="_blank" rel="noopener noreferrer">
+                    <div class="list-icon c-status"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="list-content">
+                        <div class="list-title">サーバーステータス</div>
+                        <div class="list-desc">サーバーの稼働状況や、オンライン人数をリアルタイムで確認できます。</div>
+                    </div>
+                    <div class="list-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <!-- 自作Discordボット -->
+                <a href="https://discord.com/oauth2/authorize?client_id=1538733788228747416&permissio" class="list-card" target="_blank" rel="noopener noreferrer">
+                    <div class="list-icon c-bot"><i class="fa-solid fa-robot"></i></div>
+                    <div class="list-content">
+                        <div class="list-title">自作Discordボット</div>
+                        <div class="list-desc">サーバー運営を便利にするために自作したオリジナルBotです。あなたのサーバーにも導入可能です。</div>
+                    </div>
+                    <div class="list-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        &copy; 2026 村鯖. All Rights Reserved.<br>
+        Not an official Minecraft product.
+    </footer>
+
+    <!-- =========================================
+         UI動作用スクリプト (タブ切り替え・コピー等)
+    ========================================= -->
+    <script>
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.toggle("active");
+        }
+
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById("sideMenu").classList.remove("active");
+        }
+
+        function copyIP() {
+            const ip = "village-s.ddns.net";
+            navigator.clipboard.writeText(ip).then(() => {
+                const btn = document.getElementById("copyBtn");
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> コピー完了';
+                btn.style.background = "var(--accent)";
+                btn.style.color = "#fff";
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                }, 2000);
+            });
+        }
+    </script>
+
+    <!-- =========================================
+         Firebase 受信処理 (デザイン・テキストの反映)
+    ========================================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDoRYZp8IiUeDBYFjxCj3nxsoxuebdSheY",
@@ -46,43 +579,45 @@
             measurementId: "G-XFDBBJTW7K"
         };
 
-        // 初期化
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const docRef = doc(db, "website", "settings");
 
-        // 画面を開いた時に現在の設定を読み込む
-        async function loadCurrentSettings() {
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                if(data.textColor) document.getElementById('textColor').value = data.textColor;
-                if(data.titleSize) document.getElementById('titleSize').value = data.titleSize;
-                if(data.newsText) document.getElementById('newsText').value = data.newsText;
+        async function applyAdminSettings() {
+            try {
+                const docRef = doc(db, "website", "settings");
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // 1. 文字色の変更 (CSS変数を上書きして全体に適用)
+                    if (data.textColor) {
+                        document.documentElement.style.setProperty('--text-main', data.textColor);
+                    }
+                    
+                    // 2. タイトルの大きさを変更
+                    if (data.titleSize) {
+                        const titleElement = document.querySelector('.hero h1');
+                        if (titleElement) titleElement.style.fontSize = data.titleSize;
+                    }
+                    
+                    // 3. お知らせテキストの変更
+                    if (data.newsText) {
+                        const newsElement = document.getElementById('dynamic-news-text');
+                        if (newsElement) newsElement.innerText = data.newsText;
+                    }
+                } else {
+                    // データがまだ保存されていない場合のデフォルト表示
+                    document.getElementById('dynamic-news-text').innerText = "現在お知らせはありません。";
+                }
+            } catch (e) {
+                console.error("Firebaseからのデータ取得エラー:", e);
+                document.getElementById('dynamic-news-text').innerText = "データの読み込みに失敗しました。";
             }
         }
-        loadCurrentSettings();
-
-        // 保存ボタンを押した時の処理
-        document.getElementById('saveBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('saveBtn');
-            btn.innerText = "保存中...";
-            
-            try {
-                await setDoc(docRef, {
-                    textColor: document.getElementById('textColor').value,
-                    titleSize: document.getElementById('titleSize').value,
-                    newsText: document.getElementById('newsText').value,
-                    updatedAt: new Date()
-                });
-                alert("設定を保存しました！公式サイトに反映されます。");
-            } catch (e) {
-                console.error("エラー:", e);
-                alert("保存に失敗しました。Firebaseのルール設定を確認してください。");
-            } finally {
-                btn.innerText = "保存して反映する";
-            }
-        });
+        
+        // ページ読み込み時に実行
+        applyAdminSettings();
     </script>
 </body>
 </html>

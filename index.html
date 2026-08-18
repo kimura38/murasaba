@@ -3,267 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村鯖 | 公式ホームページ</title>
+    <title>村鯖 | OFFICIAL WEBSITE</title>
+    <!-- かっこいいアイコンを読み込むための設定 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 全体の設定 */
+        /* 全体の設定 (ダークテーマ) */
         :root {
-            --primary-color: #1a252c;
-            --accent-color: #27ae60;
-            --accent-hover: #219653;
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --discord-color: #5865F2;
-            --discord-hover: #4752c4;
-            --card-bg: #ffffff;
+            --bg-base: #0f172a;       /* 深いネイビー/黒 */
+            --bg-card: #1e293b;       /* カードの背景色 */
+            --accent: #10b981;        /* アクセントのグリーン */
+            --accent-hover: #059669;
+            --text-main: #f8fafc;     /* 白に近いグレー */
+            --text-muted: #94a3b8;    /* 暗めのグレー */
+            --border-color: #334155;
+            --discord: #5865F2;
         }
 
         body {
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
             line-height: 1.6;
         }
 
-        /* ヒーローセクション（トップの目立つ部分） */
+        /* ヒーローセクション */
         .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
+            padding: 8rem 1rem 5rem;
             text-align: center;
-            padding: 6rem 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
         }
+        
+        /* タイトルのグラデーション文字 */
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin: 0;
-            letter-spacing: 4px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 6px;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
         }
+        
         .hero p {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            letter-spacing: 1px;
         }
-        .badge {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 0.4rem 1rem;
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.4rem 1.2rem;
             border-radius: 50px;
+            font-size: 0.85rem;
             font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
         }
 
-        /* メインコンテンツ枠 */
+        /* コンテンツエリア */
         .container {
-            max-width: 900px;
-            margin: -3rem auto 3rem;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
         }
 
-        /* セクション共通 */
         .section-title {
-            text-align: center;
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            border-bottom: 3px solid var(--accent-color);
-            display: inline-block;
-            padding-bottom: 0.5rem;
-        }
-        .text-center { text-align: center; }
-
-        /* カードデザイン */
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            padding: 2.5rem;
+            font-size: 1.5rem;
+            color: var(--text-main);
             margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* IPアドレスのコピー欄 */
-        .ip-container {
-            background-color: #f8f9fa;
-            border: 2px dashed #bdc3c7;
-            padding: 1.5rem;
-            font-size: 2rem;
-            font-weight: bold;
+        /* サーバーIPの表示エリア (ターミナル風) */
+        .server-info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .ip-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: #000000;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
             border-radius: 8px;
-            margin: 1.5rem auto;
-            color: var(--accent-color);
-            max-width: 500px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .ip-container:hover {
-            background-color: #eafaf1;
-            border-color: var(--accent-color);
-            transform: scale(1.02);
-        }
-        .ip-hint {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: -1rem;
-            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin: 2rem auto;
+            max-width: 600px;
         }
 
-        /* リンクカードのグリッド（横並び） */
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+        .ip-box span {
+            color: var(--accent);
+        }
+
+        .copy-btn {
+            background: var(--border-color);
+            color: var(--text-main);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .copy-btn:hover {
+            background: var(--text-muted);
+            color: var(--bg-base);
+        }
+
+        .version-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
             margin-top: 1.5rem;
         }
 
-        /* 各種ボタン/ツールカード */
-        .tool-card {
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #e1e8ed;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-color);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            box-sizing: border-box;
+        /* リンクカードグリッド */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
+
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
         .tool-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--text-muted);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .tool-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .tool-desc {
-            font-size: 0.95rem;
-            color: #666;
+
+        /* カード上部のアイコン */
+        .card-icon {
+            font-size: 2.5rem;
             margin-bottom: 1.5rem;
         }
+        .icon-discord { color: var(--discord); }
+        .icon-chat { color: #f59e0b; }
+        .icon-status { color: #3b82f6; }
 
-        /* ボタンのカラーリング */
-        .btn {
-            display: block;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            color: white;
+        .tool-title {
+            font-size: 1.4rem;
             font-weight: bold;
-            text-decoration: none;
+            margin-bottom: 1rem;
         }
-        .btn-discord { background-color: var(--discord-color); }
-        .btn-discord:hover { background-color: var(--discord-hover); }
-        
-        .btn-chat { background-color: #f39c12; }
-        .btn-chat:hover { background-color: #d68910; }
 
-        .btn-status { background-color: #34495e; }
-        .btn-status:hover { background-color: #2c3e50; }
+        .tool-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .card-link {
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .link-discord { color: var(--discord); }
+        .link-chat { color: #f59e0b; }
+        .link-status { color: #3b82f6; }
 
         /* フッター */
         footer {
             text-align: center;
-            padding: 2rem;
-            background-color: var(--primary-color);
-            color: #ecf0f1;
-            font-size: 0.9rem;
-            margin-top: 4rem;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: var(--bg-card);
         }
     </style>
 </head>
 <body>
 
     <!-- ヒーローセクション -->
-    <div class="hero">
-        <span class="badge">✨ クロスプレイ対応 ✨</span>
-        <h1>村鯖</h1>
-        <p>Java版も統合版（スマホ・Switch等）も一緒に遊べる！<br>みんなで楽しむマルチプレイサーバー</p>
-    </div>
+    <header class="hero">
+        <div class="tag"><i class="fa-solid fa-gamepad"></i> CROSSPLAY SUPPORTED</div>
+        <h1>MURASABA</h1>
+        <p>Java Edition & Bedrock Edition | Multiplayer Server</p>
+    </header>
 
     <!-- メインコンテンツ -->
-    <div class="container">
+    <main class="container">
         
-        <!-- サーバー情報セクション -->
-        <div class="card text-center">
-            <h2 class="section-title">サーバーに参加する</h2>
-            <p>以下のIPアドレスをタップ・クリックしてコピーし、<br>マイクラの「サーバーを追加」画面に入力してください。</p>
+        <!-- サーバー情報 -->
+        <section class="server-info-card">
+            <h2 class="section-title" style="justify-content: center;">
+                <i class="fa-solid fa-server"></i> JOIN THE SERVER
+            </h2>
+            <p style="color: var(--text-muted);">以下のIPアドレスをコピーしてゲーム内から接続してください</p>
             
-            <!-- IPアドレス（クリックでコピー） -->
-            <div class="ip-container" onclick="copyIP()">
-                village-s.ddns.net
+            <div class="ip-box">
+                <i class="fa-solid fa-terminal" style="color: #334155;"></i>
+                <span>village-s.ddns.net</span>
+                <button class="copy-btn" id="copyBtn" onclick="copyIP()">
+                    <i class="fa-regular fa-copy"></i> COPY
+                </button>
             </div>
-            <p class="ip-hint">👆 クリックしてIPをコピー 👆</p>
 
-            <p style="color: #666; font-size: 0.95rem; background: #f8f9fa; padding: 1rem; border-radius: 8px; display: inline-block; text-align: left;">
-                <strong>✅ Java版の方:</strong> そのままIPを入力して参加できます。<br>
-                <strong>✅ 統合版（スマホ・Switch等）の方:</strong> ポート番号はデフォルト（19132）のままで参加可能です。
-            </p>
-        </div>
-
-        <!-- ツール＆リンク セクション -->
-        <div class="card">
-            <div class="text-center">
-                <h2 class="section-title">コミュニティ & ツール</h2>
+            <div class="version-info">
+                <div><i class="fa-brands fa-java"></i> Java版: そのまま接続</div>
+                <div><i class="fa-solid fa-mobile-screen-button"></i> 統合版: ポート 19132</div>
             </div>
+        </section>
+
+        <!-- ツール＆リンク -->
+        <h2 class="section-title"><i class="fa-solid fa-link"></i> COMMUNITY & TOOLS</h2>
+        <div class="links-grid">
             
-            <div class="links-grid">
-                
-                <!-- Discordカード -->
-                <a href="https://discord.gg/2qPETeMwcj" class="tool-card" target="_blank" rel="noopener noreferrer">
-                    <div>
-                        <div class="tool-title">公式Discord</div>
-                        <div class="tool-desc">最新情報やルールの確認、プレイヤー同士の交流はこちら！参加必須です。</div>
-                    </div>
-                    <div class="btn btn-discord">Discordに参加する</div>
-                </a>
+            <!-- Discord -->
+            <a href="https://discord.gg/2qPETeMwcj" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon icon-discord"><i class="fa-brands fa-discord"></i></div>
+                <div class="tool-title">Official Discord</div>
+                <div class="tool-desc">サーバーのルール確認や最新情報、プレイヤー同士のボイスチャット・交流はこちらから。参加必須です。</div>
+                <div class="card-link link-discord">Join Discord <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
 
-                <!-- Webチャットカード -->
-                <a href="https://discord-pied-pi.vercel.app/" class="tool-card" target="_blank" rel="noopener noreferrer">
-                    <div>
-                        <div class="tool-title">Webチャット</div>
-                        <div class="tool-desc">ブラウザから直接Discordの村鯖チャットを確認・発言できる便利なツールです。</div>
-                    </div>
-                    <div class="btn btn-chat">Webチャットを開く</div>
-                </a>
+            <!-- Webチャット -->
+            <a href="https://discord-pied-pi.vercel.app/" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon icon-chat"><i class="fa-solid fa-comments"></i></div>
+                <div class="tool-title">Web Chat</div>
+                <div class="tool-desc">ブラウザから直接村鯖のチャットを確認・発言できる連携ツール。ゲーム外からでも会話に参加できます。</div>
+                <div class="card-link link-chat">Open Chat <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
 
-                <!-- ステータスカード -->
-                <a href="https://kimura38.github.io/mc-village-server/" class="tool-card" target="_blank" rel="noopener noreferrer">
-                    <div>
-                        <div class="tool-title">サーバーステータス</div>
-                        <div class="tool-desc">現在のサーバーの稼働状況や、今誰が遊んでいるかリアルタイムで確認できます。</div>
-                    </div>
-                    <div class="btn btn-status">ステータスを確認</div>
-                </a>
+            <!-- サーバーステータス -->
+            <a href="https://kimura38.github.io/mc-village-server/" class="tool-card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon icon-status"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="tool-title">Server Status</div>
+                <div class="tool-desc">現在のサーバー稼働状況や、オンラインのプレイヤー人数をリアルタイムでモニタリングできます。</div>
+                <div class="card-link link-status">View Status <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
 
-            </div>
         </div>
-        
-    </div>
+    </main>
 
     <!-- フッター -->
     <footer>
-        &copy; 2026 村鯖 (MuraSaba). All Rights Reserved.<br>
+        &copy; 2026 MURASABA. All Rights Reserved.<br>
         Not an official Minecraft product.
     </footer>
 
-    <!-- IPアドレスをコピーするJavaScript -->
+    <!-- IPコピースクリプト -->
     <script>
         function copyIP() {
             const ip = "village-s.ddns.net";
             navigator.clipboard.writeText(ip).then(() => {
-                alert("IPアドレス「" + ip + "」をコピーしました！\nゲーム内で貼り付けてください。");
-            }).catch(err => {
-                alert("コピーに失敗しました。手動でコピーしてください。");
+                const btn = document.getElementById("copyBtn");
+                const originalContent = btn.innerHTML;
+                
+                // コピー成功時の表示切り替え
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> COPIED!';
+                btn.style.background = "var(--accent)";
+                btn.style.color = "#fff";
+                
+                // 2秒後に元に戻す
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                }, 2000);
             });
         }
     </script>

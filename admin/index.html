@@ -3,83 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村鯖 | サイト管理画面</title>
+    <title>村鯖 | ライブエディター</title>
     <style>
-        body { font-family: sans-serif; padding: 2rem; background: #f4f7f6; color: #333; }
-        .admin-box { background: #fff; padding: 2rem; border-radius: 8px; max-width: 800px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 0 auto 2rem; }
-        h2 { border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
-        .section { margin-bottom: 2.5rem; background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .section h3 { margin-top: 0; color: #0f172a; }
-        label { display: block; margin-top: 1rem; font-weight: bold; font-size: 0.9rem; color: #475569; }
-        input[type="text"], textarea { width: 100%; padding: 0.8rem; margin-top: 0.3rem; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
-        input[type="color"] { margin-top: 0.3rem; }
-        textarea { resize: vertical; }
-        .save-btn { display: block; width: 100%; padding: 1.2rem; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.2rem; position: sticky; bottom: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-        .save-btn:hover { background: #059669; }
+        body { margin: 0; display: flex; height: 100vh; font-family: sans-serif; overflow: hidden; background: #0f172a; color: #333; }
+        
+        /* 左側：エディターパネル */
+        #editor-panel { width: 45%; background: #f4f7f6; overflow-y: auto; padding: 20px; box-sizing: border-box; box-shadow: 2px 0 10px rgba(0,0,0,0.2); z-index: 10; }
+        
+        /* 右側：プレビュー画面 */
+        #preview-panel { width: 55%; background: #000; display: flex; flex-direction: column; }
+        #preview-frame { flex-grow: 1; border: none; width: 100%; height: 100%; background: #0f172a; }
+        .preview-header { background: #1e293b; color: white; padding: 10px; text-align: center; font-size: 0.9rem; font-weight: bold; }
+
+        /* エディター内のデザイン */
+        h2 { border-bottom: 2px solid #10b981; padding-bottom: 5px; margin-top: 2rem; color: #1e293b; }
+        .box { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; position: relative; }
+        label { display: block; font-weight: bold; margin-top: 10px; font-size: 0.9rem; color: #475569; }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea { font-family: monospace; }
+        
+        .btn-add { background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; position: absolute; top: 15px; right: 15px; font-size: 0.8rem; }
+        .btn-save { background: #10b981; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.2rem; position: sticky; bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn-save:hover { background: #059669; }
     </style>
 </head>
 <body>
-    <div class="admin-box">
-        <h2>⚙️ サイトコンテンツ管理</h2>
-        <p>ここで入力した内容が公式サイトにリアルタイムで反映されます。空欄の項目はサイト上でも空欄になります。</p>
 
-        <div class="section">
-            <h3>🎨 全体デザイン</h3>
-            <label>サイト全体の文字色</label>
-            <input type="color" id="textColor" value="#f8fafc">
+    <!-- 左側の編集パネル -->
+    <div id="editor-panel">
+        <h1 style="margin-top:0; color:#10b981;">⚙️ サイトエディター</h1>
+        <p style="font-size: 0.9rem; color: #666;">ここで編集して「保存」を押すと、右側のプレビューが更新されます。</p>
+
+        <h2>🎨 デザイン＆基本設定</h2>
+        <div class="box">
+            <label>サイトタイトル</label>
+            <input type="text" id="siteTitle" onchange="appData.site.title = this.value">
+            
+            <label>サブタイトル</label>
+            <input type="text" id="siteSubtitle" onchange="appData.site.subtitle = this.value">
+            
+            <label>全体の文字色</label>
+            <input type="color" id="textColor" onchange="appData.design.textColor = this.value">
+            
+            <label>テーマカラー (アクセント色)</label>
+            <input type="color" id="themeColor" onchange="appData.design.themeColor = this.value">
+            
+            <label>フォント (文字の形)</label>
+            <select id="fontFamily" onchange="appData.design.fontFamily = this.value">
+                <option value="'Helvetica Neue', Arial, sans-serif">標準ゴシック (モダンで見やすい)</option>
+                <option value="'Noto Serif JP', serif">明朝体 (和風・硬派な印象)</option>
+                <option value="'Courier New', monospace">等幅フォント (プログラミング風)</option>
+            </select>
+            
             <label>タイトルの大きさ (例: 3.5rem, 50px)</label>
-            <input type="text" id="titleSize" placeholder="3.5rem">
+            <input type="text" id="titleSize" onchange="appData.design.titleSize = this.value">
         </div>
 
-        <div class="section">
-            <h3>🏠 ホームタブ</h3>
-            <label>サイトタイトル (例: 村鯖)</label>
-            <input type="text" id="siteTitle">
-            <label>サブタイトル (例: Java版 ＆ 統合版 | マルチプレイサーバー)</label>
-            <input type="text" id="siteSubtitle">
-            <label>当サーバーについて (説明文)</label>
-            <textarea id="aboutText" rows="4"></textarea>
-            
-            <label>最新のお知らせ - 日付</label>
-            <input type="text" id="newsDate">
-            <label>最新のお知らせ - 内容</label>
-            <textarea id="newsText" rows="3"></textarea>
-        </div>
+        <h2>📑 タブ構成 (メニューとページ作成)</h2>
+        <p style="font-size: 0.85rem;">内容にはHTMLタグ（&lt;h3&gt; や &lt;br&gt; など）を使って自由にレイアウトを組むことができます。</p>
+        <div id="tabs-container"></div>
+        <button class="btn-add" onclick="addTab()">＋ 新しいタブ（ページ）を作成</button>
 
-        <div class="section">
-            <h3>🎮 サーバー参加タブ</h3>
-            <label>IPアドレス (例: village-s.ddns.net)</label>
-            <input type="text" id="serverIp">
-            <label>Java版の説明 (例: Java版: そのまま接続)</label>
-            <input type="text" id="javaDesc">
-            <label>統合版の説明 (例: 統合版: ポート 19132)</label>
-            <input type="text" id="bedrockDesc">
-        </div>
+        <h2>🔗 リンク一覧設定</h2>
+        <div id="links-container"></div>
+        <button class="btn-add" onclick="addLink()">＋ 新しいリンクを追加</button>
 
-        <div class="section">
-            <h3>📖 ルールタブ (箇条書きや改行をそのまま入力してください)</h3>
-            <label>サーバールール (Minecraft)</label>
-            <textarea id="mcRules" rows="8"></textarea>
-            <label>Discordルール</label>
-            <textarea id="discordRules" rows="8"></textarea>
-            <label>違反対応について</label>
-            <textarea id="punishRules" rows="5"></textarea>
-        </div>
+        <br><br>
+        <button class="btn-save" id="saveBtn" onclick="saveData()">💾 保存してプレビュー更新</button>
+    </div>
 
-        <div class="section">
-            <h3>🔨 活動内容タブ</h3>
-            <label>活動1：タイトル</label>
-            <input type="text" id="act1Title">
-            <label>活動1：説明文</label>
-            <textarea id="act1Text" rows="4"></textarea>
-            
-            <label>活動2：タイトル</label>
-            <input type="text" id="act2Title">
-            <label>活動2：説明文</label>
-            <textarea id="act2Text" rows="4"></textarea>
-        </div>
-
-        <button class="save-btn" id="saveBtn">💾 保存してサイトに反映する</button>
+    <!-- 右側のプレビュー画面 -->
+    <div id="preview-panel">
+        <div class="preview-header">👀 ライブプレビュー (公式サイトの実際の見え方)</div>
+        <iframe id="preview-frame" src="../index.html"></iframe>
     </div>
 
     <script type="module">
@@ -97,59 +94,117 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const docRef = doc(db, "website", "content");
+        const docRef = doc(db, "website", "dynamicData");
 
-        // 読み込み処理
+        // アプリ全体のデータ構造 (初期値)
+        window.appData = {
+            design: { textColor: "#f8fafc", themeColor: "#10b981", fontFamily: "'Helvetica Neue', Arial, sans-serif", titleSize: "3.5rem" },
+            site: { title: "村鯖", subtitle: "Java版 ＆ 統合版 | マルチプレイサーバー" },
+            tabs: [
+                { id: "tab-home", title: "ホーム", icon: "fa-house", content: "<div class='box-card'>ここにホームのテキストを入力</div>" }
+            ],
+            links: [
+                { title: "公式Discord", url: "https://discord.gg/...", icon: "fa-discord", color: "#5865F2", desc: "説明文を入力" }
+            ]
+        };
+
+        // データの読み込み
         async function loadData() {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                const data = docSnap.data();
-                const fields = ["textColor", "titleSize", "siteTitle", "siteSubtitle", "aboutText", "newsDate", "newsText", "serverIp", "javaDesc", "bedrockDesc", "mcRules", "discordRules", "punishRules", "act1Title", "act1Text", "act2Title", "act2Text"];
-                fields.forEach(field => {
-                    if (data[field] !== undefined) {
-                        document.getElementById(field).value = data[field];
-                    }
-                });
+                window.appData = docSnap.data();
             }
-        }
-        loadData();
+            
+            // デザイン設定をフォームに反映
+            document.getElementById('siteTitle').value = appData.site.title || "";
+            document.getElementById('siteSubtitle').value = appData.site.subtitle || "";
+            document.getElementById('textColor').value = appData.design.textColor || "#f8fafc";
+            document.getElementById('themeColor').value = appData.design.themeColor || "#10b981";
+            document.getElementById('fontFamily').value = appData.design.fontFamily || "'Helvetica Neue', Arial, sans-serif";
+            document.getElementById('titleSize').value = appData.design.titleSize || "3.5rem";
 
-        // 保存処理
-        document.getElementById('saveBtn').addEventListener('click', async () => {
+            renderTabs();
+            renderLinks();
+        }
+
+        // タブ編集UIの描画
+        window.renderTabs = function() {
+            const container = document.getElementById('tabs-container');
+            container.innerHTML = "";
+            appData.tabs.forEach((tab, index) => {
+                container.innerHTML += `
+                    <div class="box">
+                        <button class="btn-delete" onclick="deleteTab(${index})">削除</button>
+                        <label>タブ名 (メニューに表示)</label>
+                        <input type="text" value="${tab.title}" onchange="appData.tabs[${index}].title = this.value">
+                        <label>アイコン (例: fa-book, fa-server)</label>
+                        <input type="text" value="${tab.icon}" onchange="appData.tabs[${index}].icon = this.value">
+                        <label>タブ内の構成・文章 (HTML使用可能)</label>
+                        <textarea rows="6" onchange="appData.tabs[${index}].content = this.value">${tab.content}</textarea>
+                    </div>
+                `;
+            });
+        }
+
+        // リンク編集UIの描画
+        window.renderLinks = function() {
+            const container = document.getElementById('links-container');
+            container.innerHTML = "";
+            appData.links.forEach((link, index) => {
+                container.innerHTML += `
+                    <div class="box">
+                        <button class="btn-delete" onclick="deleteLink(${index})">削除</button>
+                        <label>リンク名</label>
+                        <input type="text" value="${link.title}" onchange="appData.links[${index}].title = this.value">
+                        <label>URL (飛び先)</label>
+                        <input type="text" value="${link.url}" onchange="appData.links[${index}].url = this.value">
+                        <label>アイコン色 (例: #5865F2)</label>
+                        <input type="color" value="${link.color}" onchange="appData.links[${index}].color = this.value">
+                        <label>アイコン種類 (例: fa-discord)</label>
+                        <input type="text" value="${link.icon}" onchange="appData.links[${index}].icon = this.value">
+                        <label>説明文</label>
+                        <input type="text" value="${link.desc}" onchange="appData.links[${index}].desc = this.value">
+                    </div>
+                `;
+            });
+        }
+
+        // 追加・削除機能
+        window.addTab = function() {
+            appData.tabs.push({ id: "tab-" + Date.now(), title: "新しいタブ", icon: "fa-star", content: "新しいページです" });
+            renderTabs();
+        }
+        window.deleteTab = function(index) {
+            appData.tabs.splice(index, 1);
+            renderTabs();
+        }
+        window.addLink = function() {
+            appData.links.push({ title: "新しいリンク", url: "", icon: "fa-link", color: "#ffffff", desc: "" });
+            renderLinks();
+        }
+        window.deleteLink = function(index) {
+            appData.links.splice(index, 1);
+            renderLinks();
+        }
+
+        // 保存してプレビュー更新
+        window.saveData = async function() {
             const btn = document.getElementById('saveBtn');
             btn.innerText = "保存中...";
-            
-            const dataToSave = {
-                textColor: document.getElementById('textColor').value,
-                titleSize: document.getElementById('titleSize').value,
-                siteTitle: document.getElementById('siteTitle').value,
-                siteSubtitle: document.getElementById('siteSubtitle').value,
-                aboutText: document.getElementById('aboutText').value,
-                newsDate: document.getElementById('newsDate').value,
-                newsText: document.getElementById('newsText').value,
-                serverIp: document.getElementById('serverIp').value,
-                javaDesc: document.getElementById('javaDesc').value,
-                bedrockDesc: document.getElementById('bedrockDesc').value,
-                mcRules: document.getElementById('mcRules').value,
-                discordRules: document.getElementById('discordRules').value,
-                punishRules: document.getElementById('punishRules').value,
-                act1Title: document.getElementById('act1Title').value,
-                act1Text: document.getElementById('act1Text').value,
-                act2Title: document.getElementById('act2Title').value,
-                act2Text: document.getElementById('act2Text').value,
-                updatedAt: new Date()
-            };
-
             try {
-                await setDoc(docRef, dataToSave);
-                alert("保存完了！公式サイトをリロードして確認してください。");
+                await setDoc(docRef, appData);
+                // プレビューのiframeをリロードして反映
+                document.getElementById('preview-frame').contentWindow.location.reload();
+                btn.innerText = "💾 保存完了 (プレビュー更新済)";
+                setTimeout(() => btn.innerText = "💾 保存してプレビュー更新", 2000);
             } catch (e) {
                 console.error(e);
-                alert("保存に失敗しました。Firebaseのルール設定を確認してください。");
-            } finally {
-                btn.innerText = "💾 保存してサイトに反映する";
+                alert("保存エラー。Firebaseの設定を確認してください。");
             }
-        });
+        }
+
+        // 起動時に読み込み
+        loadData();
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村鯖 | 公式ホームページ</title>
+    <title>MURASABA</title>
     <style>
         /* === カラーテーマの変数定義 === */
         :root {
@@ -91,17 +91,41 @@
         .page-view.active { display: block; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ヒーローセクション (背景画像なしでもカッコよく) */
+        /* ヒーローセクション */
         .hero { 
             position: relative; height: 85vh; 
             background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(0,0,0,0.95) 100%), url('https://images.unsplash.com/photo-1606166325683-e6eb39ebfacb?auto=format&fit=crop&w=1920&q=80');
             background-size: cover; background-position: center; background-attachment: fixed;
             display: flex; align-items: center; justify-content: center; text-align: center; color: #ffffff; box-sizing: border-box; 
+            overflow: hidden;
         }
-        .hero-content { position: relative; z-index: 2; padding: 20px; animation: slideUp 0.8s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .hero h1 { font-size: 4em; margin: 0 0 15px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); font-weight: 900; letter-spacing: 4px; }
-        .hero p { font-size: 1.3em; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-weight: 300; letter-spacing: 1px; color: #cccccc; }
+        .hero-content { position: relative; z-index: 2; padding: 20px; }
+        
+        /* 降ってくるアニメーション */
+        @keyframes fallDown {
+            0% { transform: translateY(-300px); opacity: 0; }
+            60% { transform: translateY(20px); opacity: 1; }
+            80% { transform: translateY(-10px); }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .hero h1 { 
+            font-size: 5em; margin: 0 0 15px 0; 
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8); 
+            font-weight: 900; letter-spacing: 4px; 
+            opacity: 0; /* アニメーション前は非表示 */
+            animation: fallDown 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.2s;
+        }
+        
+        .hero p { 
+            font-size: 1.3em; margin: 0; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+            font-weight: 300; letter-spacing: 1px; color: #cccccc; 
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 1s;
+        }
 
         /* コンテンツ幅 */
         .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
@@ -121,9 +145,9 @@
         h3 { font-size: 1.2em; color: var(--heading-color); margin-top: 35px; border-left: 5px solid var(--accent-color); padding-left: 12px; }
         h3:first-child { margin-top: 0; }
 
-        /* ステータスボックス */
-        .status-box { font-size: 1.1em; margin-bottom: 20px; padding: 20px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        .status-text { font-weight: bold; }
+        /* ステータスボックス (数字のみに特化) */
+        .status-box { font-size: 1.1em; margin-bottom: 20px; padding: 20px 30px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .status-text { font-size: 1.8em; font-weight: bold; letter-spacing: 2px; }
         
         .copy-btn { background-color: var(--border-color); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; color: var(--text-color); font-weight: bold; transition: 0.2s; box-shadow: 0 2px 5px var(--shadow-color); }
         .copy-btn:hover { background-color: var(--details-border); transform: translateY(-2px); }
@@ -145,15 +169,15 @@
         .rules-list li { margin-bottom: 12px; background: var(--box-bg); padding: 12px 20px; border-radius: 8px; border-left: 3px solid var(--border-color); }
         .rules-list strong { color: var(--heading-color); font-size: 1.05em; display: block; margin-bottom: 5px; }
 
-        /* Discord iframe */
-        .discord-wrapper { width: 100%; height: 75vh; border: 2px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--box-bg); box-shadow: 0 10px 30px var(--shadow-color); }
-        .discord-iframe { width: 100%; height: 100%; border: none; }
+        /* Discord 全画面用 */
+        .discord-full-wrapper { width: 100vw; height: 100vh; padding-top: 80px; box-sizing: border-box; background: var(--box-bg); }
+        .discord-full-wrapper iframe { width: 100%; height: 100%; border: none; display: block; }
     </style>
 </head>
 <body>
 
     <header class="fixed-header">
-        <a href="#" class="text-logo" id="header-logo">Village Server</a>
+        <a href="#" class="text-logo" id="header-logo">村鯖</a>
         <div class="menu-btn" id="menu-btn">
             <span></span><span></span><span></span>
         </div>
@@ -185,8 +209,8 @@
     <div id="view-home" class="page-view active">
         <div class="hero">
             <div class="hero-content">
-                <h1>村鯖へようこそ</h1>
-                <p>村鯖公式ホームページ<br>みんなで楽しくサバイバル生活を送ろう！</p>
+                <h1>村鯖</h1>
+                <p>みんなで楽しくサバイバル生活を送ろう！</p>
             </div>
         </div>
 
@@ -223,7 +247,10 @@
                 <summary class="section-summary">現在のサーバーステータス</summary>
                 <div class="details-content">
                     <div class="status-box">
-                        <div class="status-text">オンライン人数: <strong id="online-count" style="color: #28a745; font-size: 1.2em;">取得中...</strong> / <strong id="max-count">--</strong> 人</div>
+                        <div class="status-text">
+                            <strong id="online-count" style="color: #28a745;">取得中...</strong>
+                            <span id="max-wrapper" style="color: var(--text-color); font-size: 0.8em; margin-left: 5px;"> / <strong id="max-count">--</strong></span>
+                        </div>
                         <button id="toggle-players-btn">プレイヤー名を見る</button>
                     </div>
                     <ul id="player-list" class="player-list"></ul>
@@ -292,13 +319,10 @@
         </div>
     </div>
 
-    <!-- Discordチャット画面 -->
+    <!-- Discordチャット画面 (まんべんなく広げる設定) -->
     <div id="view-discord" class="page-view">
-        <div class="container" style="padding-top: 120px; max-width: 1200px;">
-            <h2 style="color: var(--accent-color); margin-top: 0; text-align: center; margin-bottom: 30px; font-size: 2em;">Discord ウェブチャット</h2>
-            <div class="discord-wrapper">
-                <iframe src="https://discord-pied-pi.vercel.app/" class="discord-iframe" allow="microphone; camera; clipboard-write"></iframe>
-            </div>
+        <div class="discord-full-wrapper">
+            <iframe src="https://discord-pied-pi.vercel.app/" allow="microphone; camera; clipboard-write"></iframe>
         </div>
     </div>
 
@@ -392,10 +416,14 @@
             fetch(apiUrl).then(res => res.json()).then(data => {
                 const countElement = document.getElementById('online-count');
                 const maxElement = document.getElementById('max-count');
+                const maxWrapper = document.getElementById('max-wrapper');
+                
                 if (data.online) {
                     countElement.innerText = data.players.online; 
                     countElement.style.color = "#28a745";
                     maxElement.innerText = data.players.max;
+                    maxWrapper.style.display = "inline";
+                    
                     if (data.players.online > 0) {
                         toggleBtn.style.display = 'inline-block';
                     } else {
@@ -414,11 +442,13 @@
                 } else { 
                     countElement.innerText = 'オフライン'; 
                     countElement.style.color = '#dc3545';
+                    maxWrapper.style.display = "none";
                     toggleBtn.style.display = 'none';
                 }
             }).catch(() => { 
                 document.getElementById('online-count').innerText = '取得エラー'; 
                 document.getElementById('online-count').style.color = '#dc3545';
+                document.getElementById('max-wrapper').style.display = 'none';
             });
         }
         

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>村鯖 | 管理画面</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; background: #f4f7f6; color: #333; }
+        .admin-box { background: #fff; padding: 2rem; border-radius: 8px; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 0 auto; }
+        label { display: block; margin-top: 1.5rem; font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 0.8rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[type="color"] { margin-top: 0.5rem; }
+        button { margin-top: 2rem; padding: 1rem 2rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    <div class="admin-box">
+        <h2>⚙️ サイト管理画面</h2>
+        <p>ここで保存した内容が公式サイトにリアルタイムで反映されます。</p>
+        
+        <label>サイト全体の文字色 (デフォルト: #f8fafc)</label>
+        <input type="color" id="textColor" value="#f8fafc">
+        
+        <label>タイトルの大きさ (例: 4rem, 50px など)</label>
+        <input type="text" id="titleSize" placeholder="4rem">
+        
+        <label>最新のお知らせテキスト</label>
+        <textarea id="newsText" rows="4" placeholder="ここにお知らせを入力してください"></textarea>
+        
+        <button id="saveBtn">保存して反映する</button>
+    </div>
+
+    <!-- Firebaseの読み込み (※確実な動作のため安定版v10を指定しています) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoRYZp8IiUeDBYFjxCj3nxsoxuebdSheY",
+            authDomain: "linemodoki-pro.firebaseapp.com",
+            projectId: "linemodoki-pro",
+            storageBucket: "linemodoki-pro.firebasestorage.app",
+            messagingSenderId: "787553651066",
+            appId: "1:787553651066:web:5f1ba0d27cc6c64f43eec3",
+            measurementId: "G-XFDBBJTW7K"
+        };
+
+        // 初期化
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const docRef = doc(db, "website", "settings");
+
+        // 画面を開いた時に現在の設定を読み込む
+        async function loadCurrentSettings() {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.textColor) document.getElementById('textColor').value = data.textColor;
+                if(data.titleSize) document.getElementById('titleSize').value = data.titleSize;
+                if(data.newsText) document.getElementById('newsText').value = data.newsText;
+            }
+        }
+        loadCurrentSettings();
+
+        // 保存ボタンを押した時の処理
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "保存中...";
+            
+            try {
+                await setDoc(docRef, {
+                    textColor: document.getElementById('textColor').value,
+                    titleSize: document.getElementById('titleSize').value,
+                    newsText: document.getElementById('newsText').value,
+                    updatedAt: new Date()
+                });
+                alert("設定を保存しました！公式サイトに反映されます。");
+            } catch (e) {
+                console.error("エラー:", e);
+                alert("保存に失敗しました。Firebaseのルール設定を確認してください。");
+            } finally {
+                btn.innerText = "保存して反映する";
+            }
+        });
+    </script>
+</body>
+</html>

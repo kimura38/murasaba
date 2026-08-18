@@ -18,6 +18,8 @@
             --shadow-color: rgba(0,0,0,0.1);
             --accent-color: #007bff;
             --accent-hover: #0056b3;
+            --discord-color: #5865F2;
+            --discord-hover: #4752C4;
         }
 
         body.dark-mode {
@@ -93,7 +95,7 @@
 
         /* ヒーローセクション */
         .hero { 
-            position: relative; height: 85vh; 
+            position: relative; height: 90vh; 
             background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(0,0,0,0.95) 100%), url('https://images.unsplash.com/photo-1606166325683-e6eb39ebfacb?auto=format&fit=crop&w=1920&q=80');
             background-size: cover; background-position: center; background-attachment: fixed;
             display: flex; align-items: center; justify-content: center; text-align: center; color: #ffffff; box-sizing: border-box; 
@@ -109,11 +111,18 @@
             100% { transform: translateY(0); opacity: 1; }
         }
         
+        .hero-ruby {
+            font-size: 1.8em; font-weight: bold; letter-spacing: 8px; color: #00d2ff;
+            margin-bottom: -15px; opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 0.8s;
+        }
+
         .hero h1 { 
             font-size: 5em; margin: 0 0 15px 0; 
             text-shadow: 0 5px 15px rgba(0,0,0,0.8); 
             font-weight: 900; letter-spacing: 4px; 
-            opacity: 0; /* アニメーション前は非表示 */
+            opacity: 0; 
             animation: fallDown 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
             animation-delay: 0.2s;
         }
@@ -124,8 +133,19 @@
             font-weight: 300; letter-spacing: 1px; color: #cccccc; 
             opacity: 0;
             animation: fadeIn 1s ease forwards;
-            animation-delay: 1s;
+            animation-delay: 1.2s;
         }
+
+        /* 公式Discordボタン */
+        .discord-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            background-color: var(--discord-color); color: #ffffff; padding: 15px 35px; border-radius: 30px;
+            text-decoration: none; font-weight: bold; font-size: 1.2em; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4); transition: 0.3s;
+            opacity: 0; animation: fadeIn 1s ease forwards; animation-delay: 1.5s;
+            margin-top: 30px;
+        }
+        .discord-btn:hover { background-color: var(--discord-hover); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(88, 101, 242, 0.6); }
 
         /* コンテンツ幅 */
         .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
@@ -145,20 +165,15 @@
         h3 { font-size: 1.2em; color: var(--heading-color); margin-top: 35px; border-left: 5px solid var(--accent-color); padding-left: 12px; }
         h3:first-child { margin-top: 0; }
 
-        /* ステータスボックス (数字のみに特化) */
-        .status-box { font-size: 1.1em; margin-bottom: 20px; padding: 20px 30px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        .status-text { font-size: 1.8em; font-weight: bold; letter-spacing: 2px; }
+        /* ステータスボックス (人数表示のみ) */
+        .status-box { font-size: 1.2em; margin-bottom: 10px; padding: 25px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; text-align: center; display: flex; justify-content: center; align-items: center; }
+        .status-text { font-size: 1.6em; font-weight: bold; letter-spacing: 1px; color: var(--text-color); }
+        .status-text strong { font-size: 1.4em; }
         
         .copy-btn { background-color: var(--border-color); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; color: var(--text-color); font-weight: bold; transition: 0.2s; box-shadow: 0 2px 5px var(--shadow-color); }
         .copy-btn:hover { background-color: var(--details-border); transform: translateY(-2px); }
         .auto-open-btn { display: inline-flex; align-items: center; background-color: #28a745; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(40,167,69,0.3); transition: 0.2s; font-size: 1em; margin-top: 10px; }
         .auto-open-btn:hover { background-color: #218838; transform: translateY(-2px); }
-        
-        #toggle-players-btn { padding: 8px 15px; border-radius: 20px; border: 2px solid var(--accent-color); cursor: pointer; background: transparent; color: var(--accent-color); font-size: 0.9em; font-weight: bold; display: none; transition: 0.2s; }
-        #toggle-players-btn:hover { background: var(--accent-color); color: #fff; }
-
-        .player-list { list-style: none; padding: 0; display: none; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
-        .player-list li { background: var(--box-bg); padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.95em; border: 1px solid var(--details-border); color: var(--text-color); }
         
         .code-box { background: var(--code-bg); padding: 8px 15px; border-radius: 6px; font-family: 'Consolas', monospace; color: #ff4757; border: 1px solid var(--details-border); font-size: 1.1em; display: inline-block; letter-spacing: 1px; }
         .input-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
@@ -209,8 +224,10 @@
     <div id="view-home" class="page-view active">
         <div class="hero">
             <div class="hero-content">
-                <h1>村鯖</h1>
+                <div class="hero-ruby">村鯖</div>
+                <h1>MURASABA</h1>
                 <p>みんなで楽しくサバイバル生活を送ろう！</p>
+                <a href="https://discord.gg/2qPETeMwcj" target="_blank" class="discord-btn">公式Discordに参加する</a>
             </div>
         </div>
 
@@ -242,18 +259,15 @@
                 </div>
             </details>
 
-            <!-- ステータス -->
+            <!-- ステータス (人数表示のみ) -->
             <details class="section-details" id="details-status" open>
                 <summary class="section-summary">現在のサーバーステータス</summary>
                 <div class="details-content">
                     <div class="status-box">
-                        <div class="status-text">
-                            <strong id="online-count" style="color: #28a745;">取得中...</strong>
-                            <span id="max-wrapper" style="color: var(--text-color); font-size: 0.8em; margin-left: 5px;"> / <strong id="max-count">--</strong></span>
+                        <div class="status-text" id="status-text-display">
+                            <strong style="color: #28a745;">取得中...</strong>
                         </div>
-                        <button id="toggle-players-btn">プレイヤー名を見る</button>
                     </div>
-                    <ul id="player-list" class="player-list"></ul>
                 </div>
             </details>
 
@@ -399,56 +413,18 @@
             });
         }
 
-        // プレイヤーリストのトグル
-        const toggleBtn = document.getElementById('toggle-players-btn');
-        const playerList = document.getElementById('player-list');
-        toggleBtn.addEventListener('click', () => {
-            if (playerList.style.display === 'none' || playerList.style.display === '') { 
-                playerList.style.display = 'flex'; toggleBtn.innerText = 'プレイヤー名を隠す'; 
-            } else { 
-                playerList.style.display = 'none'; toggleBtn.innerText = 'プレイヤー名を見る'; 
-            }
-        });
-
-        // Minecraft サーバーステータスの取得
+        // Minecraft サーバーステータスの取得 (人数表示のみ)
         const apiUrl = `https://api.mcstatus.io/v2/status/java/village-s.ddns.net`;
         function fetchStatus() {
             fetch(apiUrl).then(res => res.json()).then(data => {
-                const countElement = document.getElementById('online-count');
-                const maxElement = document.getElementById('max-count');
-                const maxWrapper = document.getElementById('max-wrapper');
-                
+                const statusDisplay = document.getElementById('status-text-display');
                 if (data.online) {
-                    countElement.innerText = data.players.online; 
-                    countElement.style.color = "#28a745";
-                    maxElement.innerText = data.players.max;
-                    maxWrapper.style.display = "inline";
-                    
-                    if (data.players.online > 0) {
-                        toggleBtn.style.display = 'inline-block';
-                    } else {
-                        toggleBtn.style.display = 'none';
-                        playerList.style.display = 'none';
-                    }
-                    
-                    playerList.innerHTML = '';
-                    if (data.players.list && data.players.list.length > 0) {
-                        data.players.list.forEach(p => { 
-                            const li = document.createElement('li'); 
-                            li.innerText = p.name_clean || p.name; 
-                            playerList.appendChild(li); 
-                        });
-                    }
+                    statusDisplay.innerHTML = `<strong style="color: #28a745;">${data.players.online}</strong> 人がオンライン`;
                 } else { 
-                    countElement.innerText = 'オフライン'; 
-                    countElement.style.color = '#dc3545';
-                    maxWrapper.style.display = "none";
-                    toggleBtn.style.display = 'none';
+                    statusDisplay.innerHTML = `<strong style="color: #dc3545;">オフライン</strong>`;
                 }
             }).catch(() => { 
-                document.getElementById('online-count').innerText = '取得エラー'; 
-                document.getElementById('online-count').style.color = '#dc3545';
-                document.getElementById('max-wrapper').style.display = 'none';
+                document.getElementById('status-text-display').innerHTML = `<strong style="color: #dc3545;">取得エラー</strong>`;
             });
         }
         

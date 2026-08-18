@@ -9,29 +9,29 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #333333;
-            --header-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.95);
             --box-bg: #f8f9fa;
-            --border-color: #f0f0f0;
+            --border-color: #e0e0e0;
             --code-bg: #f5f5f5;
             --details-border: #eaeaea;
-            --heading-color: #444444;
+            --heading-color: #222222;
             --shadow-color: rgba(0,0,0,0.1);
             --accent-color: #007bff;
             --accent-hover: #0056b3;
         }
 
         body.dark-mode {
-            --bg-color: #121212;
+            --bg-color: #0f1115;
             --text-color: #e0e0e0;
-            --header-bg: #1e1e1e;
-            --box-bg: #2d2d2d;
-            --border-color: #333333;
-            --code-bg: #2c2c2c;
-            --details-border: #444444;
-            --heading-color: #dddddd;
-            --shadow-color: rgba(0,0,0,0.5);
-            --accent-color: #4da3ff;
-            --accent-hover: #80bfff;
+            --header-bg: rgba(20, 22, 28, 0.95);
+            --box-bg: #1a1d24;
+            --border-color: #2a2e37;
+            --code-bg: #15171c;
+            --details-border: #333842;
+            --heading-color: #ffffff;
+            --shadow-color: rgba(0,0,0,0.6);
+            --accent-color: #3a86ff;
+            --accent-hover: #2563eb;
         }
 
         body {
@@ -40,113 +40,120 @@
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             margin: 0; padding: 0;
             transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
         }
 
+        /* ヘッダーとロゴ */
         .fixed-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
-            background-color: var(--header-bg); box-shadow: 0 2px 10px var(--shadow-color);
+            position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+            background-color: var(--header-bg); box-shadow: 0 4px 20px var(--shadow-color);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             z-index: 999; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 25px; box-sizing: border-box; transition: background-color 0.3s;
+            padding: 0 30px; box-sizing: border-box; transition: background-color 0.3s;
         }
-        
-        .logo-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-decoration: none;
-            letter-spacing: 2px;
+        .text-logo {
+            font-size: 1.8em; font-weight: 900; letter-spacing: 2px;
+            color: var(--heading-color); text-decoration: none;
+            background: linear-gradient(45deg, var(--accent-color), #00d2ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .menu-btn { display: flex; flex-direction: column; justify-content: space-between; width: 30px; height: 20px; cursor: pointer; z-index: 1000; }
+        .menu-btn { display: flex; flex-direction: column; justify-content: space-between; width: 32px; height: 24px; cursor: pointer; z-index: 1000; }
         .menu-btn span { display: block; height: 3px; width: 100%; background-color: var(--text-color); border-radius: 3px; transition: all 0.3s; }
 
+        /* サイドバー */
         .sidebar {
-            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
-            background-color: var(--header-bg); box-shadow: -2px 0 15px var(--shadow-color);
-            transition: right 0.3s ease; z-index: 1001; padding: 25px; box-sizing: border-box;
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100vh;
+            background-color: var(--header-bg); box-shadow: -5px 0 15px var(--shadow-color);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001; padding: 30px; box-sizing: border-box;
             display: flex; flex-direction: column;
         }
         .sidebar.open { right: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; }
         .sidebar-header h2 { margin: 0; font-size: 1.3em; color: var(--accent-color); }
-        .close-btn { background: none; border: none; font-size: 2.5em; color: var(--text-color); cursor: pointer; line-height: 1; padding: 0; }
+        .close-btn { background: none; border: none; font-size: 2.5em; color: var(--text-color); cursor: pointer; line-height: 1; transition: transform 0.2s; }
+        .close-btn:hover { transform: scale(1.1); }
         .sidebar-menu { list-style: none; padding: 0; margin: 0 0 30px 0; flex-grow: 1; }
-        .sidebar-menu li { margin-bottom: 10px; }
-        .sidebar-menu a { color: var(--text-color); text-decoration: none; font-size: 1.1em; font-weight: bold; display: block; padding: 12px 15px; border-radius: 8px; transition: all 0.2s; cursor: pointer; }
-        .sidebar-menu a:hover, .sidebar-menu a.active { background-color: var(--box-bg); color: var(--accent-color); padding-left: 20px; }
+        .sidebar-menu li { margin-bottom: 15px; }
+        .sidebar-menu a { color: var(--text-color); text-decoration: none; font-size: 1.1em; font-weight: bold; display: block; padding: 12px 15px; border-radius: 8px; transition: background 0.2s; cursor: pointer; }
+        .sidebar-menu a:hover { background-color: var(--box-bg); color: var(--accent-color); }
 
-        .sidebar-settings { border-top: 2px solid var(--border-color); padding-top: 20px; }
-        .sidebar-settings h3 { margin-top: 0; font-size: 1.1em; margin-bottom: 10px; }
-        .sidebar-settings select { width: 100%; padding: 10px; font-size: 1em; border-radius: 6px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); outline: none;}
+        .sidebar-settings { border-top: 2px solid var(--border-color); padding-top: 25px; }
+        .sidebar-settings h3 { margin-top: 0; font-size: 1.1em; margin-bottom: 10px; color: var(--heading-color); }
+        .sidebar-settings select { width: 100%; padding: 12px; font-size: 1em; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); outline: none; cursor: pointer; }
 
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(2px); }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(3px); }
         .sidebar-overlay.open { display: block; opacity: 1; }
 
+        /* ページ切り替え */
         .page-view { display: none; }
-        .page-view.active { display: block; animation: fadeIn 0.4s ease; }
+        .page-view.active { display: block; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* スタイリッシュなヒーローセクション */
+        /* ヒーローセクション (背景画像なしでもカッコよく) */
         .hero { 
-            position: relative; height: 70vh; min-height: 400px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            display: flex; align-items: center; justify-content: center; text-align: center; color: #ffffff; padding-top: 70px; box-sizing: border-box; 
-            overflow: hidden;
+            position: relative; height: 85vh; 
+            background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(0,0,0,0.95) 100%), url('https://images.unsplash.com/photo-1606166325683-e6eb39ebfacb?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: #ffffff; box-sizing: border-box; 
         }
-        .hero::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 30px 30px; opacity: 0.3;
-        }
-        .hero-content { position: relative; z-index: 2; padding: 20px; animation: fadeIn 1s ease; }
-        .hero h1 { font-size: 4em; margin: 0 0 15px 0; letter-spacing: 3px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.3em; margin: 0; opacity: 0.9; text-shadow: 0 2px 10px rgba(0,0,0,0.5); line-height: 1.6; }
+        .hero-content { position: relative; z-index: 2; padding: 20px; animation: slideUp 0.8s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero h1 { font-size: 4em; margin: 0 0 15px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); font-weight: 900; letter-spacing: 4px; }
+        .hero p { font-size: 1.3em; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-weight: 300; letter-spacing: 1px; color: #cccccc; }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 50px 20px; }
-        .section-details { margin-bottom: 30px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px var(--shadow-color); }
+        /* コンテンツ幅 */
+        .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+        
+        /* セクションデザイン */
+        .section-details { margin-bottom: 30px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 5px 20px var(--shadow-color); overflow: hidden; }
         .section-summary { 
-            color: var(--accent-color); font-size: 1.4em; font-weight: bold; margin: 0; padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; transition: background 0.2s; 
-            background: var(--box-bg);
+            background: var(--box-bg); color: var(--accent-color); font-size: 1.4em; font-weight: bold; margin: 0; padding: 20px 25px; 
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; transition: background 0.3s; 
         }
         .section-summary::-webkit-details-marker { display: none; }
         .section-summary:hover { background: var(--border-color); }
-        .section-summary::after { content: "▼"; font-size: 0.8em; transition: transform 0.3s ease; }
-        details[open] .section-summary::after { transform: rotate(-180deg); }
-        .details-content { padding: 30px; border-top: 1px solid var(--border-color); }
+        .section-summary::after { content: "+"; font-size: 1.5em; font-weight: normal; transition: transform 0.3s ease; }
+        details[open] .section-summary::after { transform: rotate(45deg); }
+        .details-content { padding: 30px 25px; }
 
-        h3 { font-size: 1.2em; color: var(--heading-color); margin-top: 30px; border-left: 5px solid var(--accent-color); padding-left: 12px; }
+        h3 { font-size: 1.2em; color: var(--heading-color); margin-top: 35px; border-left: 5px solid var(--accent-color); padding-left: 12px; }
         h3:first-child { margin-top: 0; }
+
+        /* ステータスボックス */
+        .status-box { font-size: 1.1em; margin-bottom: 20px; padding: 20px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .status-text { font-weight: bold; }
         
-        .status-box { font-size: 1.1em; margin-bottom: 15px; padding: 20px; background-color: var(--box-bg); border-radius: 8px; border-left: 5px solid #28a745; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-        
-        .copy-btn { background-color: var(--accent-color); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; color: #ffffff; font-weight: bold; transition: 0.2s; }
-        .copy-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
-        .auto-open-btn { display: inline-flex; align-items: center; background-color: #28a745; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); transition: 0.2s; font-size: 1em; margin-top: 10px; }
+        .copy-btn { background-color: var(--border-color); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; color: var(--text-color); font-weight: bold; transition: 0.2s; box-shadow: 0 2px 5px var(--shadow-color); }
+        .copy-btn:hover { background-color: var(--details-border); transform: translateY(-2px); }
+        .auto-open-btn { display: inline-flex; align-items: center; background-color: #28a745; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(40,167,69,0.3); transition: 0.2s; font-size: 1em; margin-top: 10px; }
         .auto-open-btn:hover { background-color: #218838; transform: translateY(-2px); }
         
-        #toggle-players-btn { padding: 8px 15px; border-radius: 6px; border: 1px solid var(--accent-color); cursor: pointer; background: transparent; color: var(--accent-color); font-size: 0.9em; font-weight: bold; display: none; transition: 0.2s; }
+        #toggle-players-btn { padding: 8px 15px; border-radius: 20px; border: 2px solid var(--accent-color); cursor: pointer; background: transparent; color: var(--accent-color); font-size: 0.9em; font-weight: bold; display: none; transition: 0.2s; }
         #toggle-players-btn:hover { background: var(--accent-color); color: #fff; }
 
-        .player-list { list-style: none; padding: 0; display: none; flex-direction: column; gap: 8px; margin-top: 15px; }
-        .player-list li { background: var(--bg-color); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.95em; border: 1px solid var(--details-border); color: var(--text-color); }
+        .player-list { list-style: none; padding: 0; display: none; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+        .player-list li { background: var(--box-bg); padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.95em; border: 1px solid var(--details-border); color: var(--text-color); }
         
-        .code-box { background: var(--code-bg); padding: 8px 15px; border-radius: 6px; font-family: monospace; color: var(--accent-color); border: 1px solid var(--details-border); font-size: 1.1em; font-weight: bold; display: inline-block; }
+        .code-box { background: var(--code-bg); padding: 8px 15px; border-radius: 6px; font-family: 'Consolas', monospace; color: #ff4757; border: 1px solid var(--details-border); font-size: 1.1em; display: inline-block; letter-spacing: 1px; }
         .input-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
 
-        .warning-text { background-color: rgba(217, 83, 79, 0.1); border-left: 4px solid #d9534f; padding: 15px 20px; color: #d9534f; font-weight: bold; border-radius: 4px; margin-bottom: 20px; line-height: 1.5; }
-        .rules-list { padding-left: 20px; margin-bottom: 25px; counter-reset: rule-counter; list-style-type: none; }
-        .rules-list li { margin-bottom: 15px; line-height: 1.6; position: relative; padding-left: 30px; }
-        .rules-list li::before { content: counter(rule-counter) "."; counter-increment: rule-counter; position: absolute; left: 0; color: var(--accent-color); font-weight: bold; font-size: 1.1em; }
-        .rules-list strong { color: var(--text-color); font-size: 1.05em; margin-bottom: 4px; border-bottom: 1px solid var(--details-border); padding-bottom: 2px; }
-        
-        .discord-wrapper { padding: 100px 20px 60px; max-width: 1200px; margin: 0 auto; height: 100vh; box-sizing: border-box; }
-        .discord-frame { width: 100%; height: 100%; border: none; border-radius: 12px; box-shadow: 0 5px 25px var(--shadow-color); background: var(--box-bg); }
+        /* ルール周り */
+        .warning-text { background-color: rgba(217, 83, 79, 0.1); border-left: 5px solid #d9534f; padding: 15px 20px; color: #d9534f; font-weight: bold; border-radius: 6px; margin-bottom: 30px; }
+        .rules-list { padding-left: 0; margin-bottom: 25px; list-style: none; }
+        .rules-list li { margin-bottom: 12px; background: var(--box-bg); padding: 12px 20px; border-radius: 8px; border-left: 3px solid var(--border-color); }
+        .rules-list strong { color: var(--heading-color); font-size: 1.05em; display: block; margin-bottom: 5px; }
+
+        /* Discord iframe */
+        .discord-wrapper { width: 100%; height: 75vh; border: 2px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--box-bg); box-shadow: 0 10px 30px var(--shadow-color); }
+        .discord-iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <header class="fixed-header">
-        <a href="#" class="logo-text" id="logo-link">村鯖</a>
+        <a href="#" class="text-logo" id="header-logo">Village Server</a>
         <div class="menu-btn" id="menu-btn">
             <span></span><span></span><span></span>
         </div>
@@ -159,13 +166,13 @@
             <button class="close-btn" id="close-btn">&times;</button>
         </div>
         <ul class="sidebar-menu">
-            <li><a id="nav-home" class="active">ホーム画面</a></li>
+            <li><a id="nav-home">ホーム画面</a></li>
             <li><a id="nav-discord">Discordウェブチャット</a></li>
             <li><a style="color: gray; pointer-events: none;">サーバーマップ（準備中）</a></li>
         </ul>
         <div class="sidebar-settings">
             <h3>設定</h3>
-            <label for="theme-select" style="font-size: 0.9em; margin-bottom: 8px; display: block; color: var(--heading-color);">背景のカラーモード</label>
+            <label for="theme-select" style="font-size: 0.9em; margin-bottom: 8px; display: block; color: var(--text-color);">背景のカラーモード</label>
             <select id="theme-select">
                 <option value="system">デバイスに合わせる</option>
                 <option value="light">ライトモード</option>
@@ -178,27 +185,17 @@
     <div id="view-home" class="page-view active">
         <div class="hero">
             <div class="hero-content">
-                <h1>村鯖</h1>
-                <p>村鯖の公式ホームページへ。<br>みんなで楽しくサバイバル生活を送ろう！</p>
+                <h1>村鯖へようこそ</h1>
+                <p>村鯖公式ホームページ<br>みんなで楽しくサバイバル生活を送ろう！</p>
             </div>
         </div>
 
         <div class="container">
-            <details class="section-details" id="details-status" open>
-                <summary class="section-summary">現在のサーバーステータス</summary>
-                <div class="details-content">
-                    <div class="status-box">
-                        <div>現在のオンライン人数: <strong id="online-count" style="color: #28a745; font-size: 1.2em;">取得中...</strong> / <strong id="max-count">--</strong> 人</div>
-                        <button id="toggle-players-btn">プレイヤー名を見る</button>
-                    </div>
-                    <ul id="player-list" class="player-list"></ul>
-                </div>
-            </details>
-
+            <!-- 参加方法 -->
             <details class="section-details" id="details-join" open>
                 <summary class="section-summary">サーバーへの参加方法</summary>
                 <div class="details-content">
-                    <p style="margin-top: 0; font-size: 1.1em; margin-bottom: 25px;">当サーバーはクロスプレイに対応しています。</p>
+                    <p style="font-weight: bold; color: var(--heading-color); font-size: 1.1em; margin-top: 0;">当サーバーはクロスプレイに対応しています。</p>
                     
                     <h3>Java版（PC）の方</h3>
                     <div class="input-row">
@@ -206,95 +203,107 @@
                         <button class="copy-btn" onclick="copyText('village-s.ddns.net', this)">コピー</button>
                     </div>
                     
-                    <h3 style="margin-top: 40px;">統合版（スマホ・PC・Switch・PS等）の方</h3>
+                    <h3>統合版（スマホ・PC・Switch・PS等）の方</h3>
                     <div class="input-row">
                         サーバーアドレス: <span class="code-box">village-s.ddns.net</span>
                         <button class="copy-btn" onclick="copyText('village-s.ddns.net', this)">コピー</button>
                     </div>
-                    <div class="input-row" style="margin-bottom: 20px;">
+                    <div class="input-row" style="margin-bottom: 25px;">
                         ポート: <span class="code-box">19132</span>
                         <button class="copy-btn" onclick="copyText('19132', this)">コピー</button>
                     </div>
-                    <div style="margin-top: 20px;">
-                        <a href="minecraft://?addExternalServer=村鯖|village-s.ddns.net:19132" class="auto-open-btn">マイクラを開いて自動でサーバーを追加する</a>
+                    <div>
+                        <a href="minecraft://?addExternalServer=村鯖|village-s.ddns.net:19132" class="auto-open-btn">マイクラを開いて自動で追加する</a>
                     </div>
                 </div>
             </details>
 
-            <details class="section-details" id="details-rules" open>
-                <summary class="section-summary">村鯖 利用規約</summary>
+            <!-- ステータス -->
+            <details class="section-details" id="details-status" open>
+                <summary class="section-summary">現在のサーバーステータス</summary>
                 <div class="details-content">
-                    <h3>=== サーバールール ===</h3>
-                    <div class="warning-text">- 禁止事項 -</div>
-                    <ul class="rules-list">
-                        <li><strong>荒らし行為・チート・不正行為は禁止です。</strong></li>
-                        <li><strong>他のプレイヤーへの迷惑行為、誹謗中傷、暴言、不適切なチャットは禁止です。</strong></li>
-                        <li><strong>他サーバーの宣伝や勧誘、サーバー名を出して宣伝する行為は禁止です。</strong></li>
-                        <li><strong>バグや不具合を悪用する行為は禁止です。</strong>見つけた場合は運営までご報告ください。</li>
-                        <li><strong>無限増殖は禁止です。</strong>（TNTの無限増殖は許可、エリトラ・アイテムなどの無限増殖は禁止）</li>
-                        <li><strong>他のプレイヤーへの嫌がらせや、運営の妨害行為は禁止です。</strong></li>
-                        <li><strong>一般的なマナーや常識を守ってプレイしてください。</strong></li>
-                        <li><strong>PvPで相手のアイテムを奪うことは禁止です。</strong>PvP後に相手のアイテムを拾った場合は返却してください。</li>
-                        <li><strong>運営の指示には従ってください。</strong>従わない場合は処罰の対象となることがあります。</li>
-                        <li><strong>ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</strong></li>
-                    </ul>
+                    <div class="status-box">
+                        <div class="status-text">オンライン人数: <strong id="online-count" style="color: #28a745; font-size: 1.2em;">取得中...</strong> / <strong id="max-count">--</strong> 人</div>
+                        <button id="toggle-players-btn">プレイヤー名を見る</button>
+                    </div>
+                    <ul id="player-list" class="player-list"></ul>
+                </div>
+            </details>
+
+            <!-- ルール -->
+            <details class="section-details" id="details-rules">
+                <summary class="section-summary">村鯖 ルール・規約</summary>
+                <div class="details-content">
+                    <div class="warning-text">当サーバーで楽しく安全に遊ぶため、以下のルールを遵守してください。</div>
                     
-                    <p style="color: #d9534f; font-weight: bold; background: rgba(217, 83, 79, 0.1); padding: 10px; border-radius: 4px; text-align: center;">
-                        「ルールを読んでいなかった」は理由になりません。必ず確認してから参加してください。
-                    </p>
+                    <h3>=== サーバールール ===</h3>
+                    <p><strong>-禁止事項-</strong></p>
+                    <ul class="rules-list">
+                        <li><strong>1. 荒らし行為・チート・不正行為は禁止です。</strong></li>
+                        <li><strong>2. 他のプレイヤーへの迷惑行為、誹謗中傷、暴言、不適切なチャットは禁止です。</strong></li>
+                        <li><strong>3. 他サーバーの宣伝や勧誘、サーバー名を出して宣伝する行為は禁止です。</strong></li>
+                        <li><strong>4. バグや不具合を悪用する行為は禁止です。見つけた場合は運営までご報告ください。</strong></li>
+                        <li><strong>5. 無限増殖は禁止です。</strong>（TNTの無限増殖は許可、エリトラ・アイテムなどの無限増殖は禁止）</li>
+                        <li><strong>6. 他のプレイヤーへの嫌がらせや、運営の妨害行為は禁止です。</strong></li>
+                        <li><strong>7. 一般的なマナーや常識を守ってプレイしてください。</strong></li>
+                        <li><strong>8. PvPで相手のアイテムを奪うことは禁止です。PvP後に相手のアイテムを拾った場合は返却してください。</strong></li>
+                        <li><strong>9. 運営の指示には従ってください。従わない場合は処罰の対象となることがあります。</strong></li>
+                        <li><strong>10. ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</strong></li>
+                    </ul>
+                    <p style="color: #d9534f; font-weight: bold;">「ルールを読んでいなかった」は理由になりません。必ず確認してから参加してください。</p>
 
-                    <h3 style="margin-top: 40px;">- 荒らしの報告方法 -</h3>
-                    <p style="line-height: 1.6;">Discordでのプレイヤー報告欄、又は直接主にお問い合わせください。</p>
+                    <h3>-荒らしの報告方法-</h3>
+                    <p>Discordでのプレイヤー報告欄、又は直接主にお問い合わせください。</p>
 
-                    <h3 style="margin-top: 30px;">- 荒らされた場合 -</h3>
-                    <p style="line-height: 1.6;">荒らされた場合は、運営が荒らされた時刻をもとにその範囲をバックアップしデータを復元します。<br>確かな情報がない場合、バックアップが行えない場合があります。<br>また、土地保護をつけていなかった場合は責任を負いかねない場合がありますのでご了承ください。</p>
+                    <h3>-荒らされた場合-</h3>
+                    <p>荒らされた場合は運営が荒らされた時刻をもとに、その範囲をバックアップしデータを復元します。<br>確かな情報がない場合バックアップが行えない場合があります。<br>また、土地保護をつけていなかった場合は責任を負いかねない場合がありますのでご了承ください。</p>
 
-                    <hr style="border: 0; border-top: 1px dashed var(--details-border); margin: 40px 0;">
+                    <hr style="border: none; border-top: 1px solid var(--border-color); margin: 40px 0;">
 
                     <h3>=== Discordルール ===</h3>
-                    <p style="margin-bottom: 20px;">このサーバーを利用するすべてのメンバーは、以下のルールを守ってください。</p>
-                    
-                    <div class="warning-text">- 禁止事項 -</div>
+                    <p>このサーバーを利用するすべてのメンバーは、以下のルールを守ってください。</p>
+                    <p><strong>-禁止事項-</strong></p>
                     <ul class="rules-list">
-                        <li><strong>荒らし行為・スパム・連投は禁止です。</strong></li>
-                        <li><strong>暴言・誹謗中傷・差別・脅迫・ハラスメントは禁止です。</strong></li>
-                        <li><strong>政治・宗教に関する過度な発言や勧誘は禁止です。</strong></li>
-                        <li><strong>Discord利用規約に違反する行為は禁止です。</strong></li>
-                        <li><strong>無断で当サーバーを模倣・コピーする行為は禁止です。</strong></li>
-                        <li><strong>everyoneやhereなどの不要なメンションは禁止です。</strong></li>
-                        <li><strong>DMでの宣伝・勧誘・引き抜き行為は禁止です。</strong></li>
-                        <li><strong>ショップサーバー・荒らしサーバー・アフィリエイト・金銭目的の宣伝は禁止です。</strong></li>
-                        <li><strong>NSFWコンテンツの投稿は禁止です。</strong></li>
-                        <li><strong>一般的なマナーや常識を守って参加してください。</strong></li>
-                        <li><strong>運営の指示には従ってください。</strong>従わない場合は処罰の対象となることがあります。</li>
-                        <li><strong>ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</strong></li>
+                        <li><strong>1. 荒らし行為・スパム・連投は禁止です。</strong></li>
+                        <li><strong>2. 暴言・誹謗中傷・差別・脅迫・ハラスメントは禁止です。</strong></li>
+                        <li><strong>3. 政治・宗教に関する過度な発言や勧誘は禁止です。</strong></li>
+                        <li><strong>4. Discord利用規約に違反する行為は禁止です。</strong></li>
+                        <li><strong>5. 無断で当サーバーを模倣・コピーする行為は禁止です。</strong></li>
+                        <li><strong>6. @everyoneや@hereなどの不要なメンションは禁止です。</strong></li>
+                        <li><strong>7. DMでの宣伝・勧誘・引き抜き行為は禁止です。</strong></li>
+                        <li><strong>8. ショップサーバー・荒らしサーバー・アフィリエイト・金銭目的の宣伝は禁止です。</strong></li>
+                        <li><strong>9. NSFW（年齢制限）コンテンツの投稿は禁止です。</strong></li>
+                        <li><strong>10. 一般的なマナーや常識を守って参加してください。</strong></li>
+                        <li><strong>11. 運営の指示には従ってください。従わない場合は処罰の対象となることがあります。</strong></li>
+                        <li><strong>12. ルールに記載されていない内容でも、運営が迷惑行為・不正行為と判断した場合は対応することがあります。</strong></li>
                     </ul>
 
-                    <p style="color: #d9534f; font-weight: bold; background: rgba(217, 83, 79, 0.1); padding: 10px; border-radius: 4px; text-align: center;">
-                        「ルールを読んでいなかった」は理由になりません。必ず確認してから参加してください。
-                    </p>
+                    <hr style="border: none; border-top: 1px solid var(--border-color); margin: 40px 0;">
 
-                    <h3 style="margin-top: 40px;">- 違反対応 -</h3>
-                    <p style="line-height: 1.6;">ルール違反を確認した場合、基本的に以下の対応を行います。</p>
-                    <div style="background: var(--box-bg); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--details-border); margin-bottom: 15px;">
-                        <div style="margin-bottom: 10px;"><strong>1回目：</strong> キック</div>
-                        <div><strong>2回目：</strong> BAN（永久追放）</div>
-                    </div>
-                    <p style="font-size: 0.9em; color: gray;">※違反内容によっては、上記の処分を行わず即BANとなる場合があります。</p>
+                    <h3>-違反対応-</h3>
+                    <p>ルール違反を確認した場合、基本的に以下の対応を行います。</p>
+                    <ul style="line-height: 1.8;">
+                        <li><strong>1回目：</strong> キック</li>
+                        <li><strong>2回目：</strong> BAN（永久追放）</li>
+                    </ul>
+                    <p style="color: #d9534f; font-weight: bold;">※違反内容によっては、上記の処分を行わず即BANとなる場合があります。</p>
                 </div>
             </details>
         </div>
     </div>
 
-    <!-- Discordウェブチャット画面 -->
+    <!-- Discordチャット画面 -->
     <div id="view-discord" class="page-view">
-        <div class="discord-wrapper">
-            <iframe src="https://discord-pied-pi.vercel.app/" class="discord-frame" title="Discord Web Chat"></iframe>
+        <div class="container" style="padding-top: 120px; max-width: 1200px;">
+            <h2 style="color: var(--accent-color); margin-top: 0; text-align: center; margin-bottom: 30px; font-size: 2em;">Discord ウェブチャット</h2>
+            <div class="discord-wrapper">
+                <iframe src="https://discord-pied-pi.vercel.app/" class="discord-iframe" allow="microphone; camera; clipboard-write"></iframe>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- テーマ設定 ---
+        // テーマ変更ロジック
         const themeSelect = document.getElementById('theme-select');
         const applyTheme = (theme) => {
             if (theme === 'dark') document.body.classList.add('dark-mode');
@@ -306,41 +315,44 @@
         };
         const savedTheme = localStorage.getItem('themePreference') || 'system';
         themeSelect.value = savedTheme; applyTheme(savedTheme);
-        themeSelect.addEventListener('change', (e) => { const newTheme = e.target.value; localStorage.setItem('themePreference', newTheme); applyTheme(newTheme); });
+        themeSelect.addEventListener('change', (e) => { 
+            const newTheme = e.target.value; 
+            localStorage.setItem('themePreference', newTheme); 
+            applyTheme(newTheme); 
+        });
 
-        // --- サイドバーとメニュー ---
+        // サイドバー制御
         const menuBtn = document.getElementById('menu-btn');
         const closeBtn = document.getElementById('close-btn');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const openMenu = () => { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); };
         const closeMenu = () => { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); };
-        menuBtn.addEventListener('click', openMenu); 
-        closeBtn.addEventListener('click', closeMenu); 
-        sidebarOverlay.addEventListener('click', closeMenu);
+        menuBtn.addEventListener('click', openMenu); closeBtn.addEventListener('click', closeMenu); sidebarOverlay.addEventListener('click', closeMenu);
 
-        // --- 画面切り替え ---
+        // ページ遷移制御
         const viewHome = document.getElementById('view-home');
         const viewDiscord = document.getElementById('view-discord');
         const navHome = document.getElementById('nav-home');
         const navDiscord = document.getElementById('nav-discord');
-        const logoLink = document.getElementById('logo-link');
+        const headerLogo = document.getElementById('header-logo');
 
         const showHome = () => { 
-            viewHome.classList.add('active'); viewDiscord.classList.remove('active'); 
-            navHome.classList.add('active'); navDiscord.classList.remove('active');
-            closeMenu(); 
+            viewHome.classList.add('active'); 
+            viewDiscord.classList.remove('active'); 
+            closeMenu(); window.scrollTo(0, 0);
         };
         const showDiscord = () => { 
-            viewHome.classList.remove('active'); viewDiscord.classList.add('active'); 
-            navHome.classList.remove('active'); navDiscord.classList.add('active');
-            closeMenu(); 
+            viewHome.classList.remove('active'); 
+            viewDiscord.classList.add('active'); 
+            closeMenu(); window.scrollTo(0, 0);
         };
+        
         navHome.addEventListener('click', showHome); 
         navDiscord.addEventListener('click', showDiscord);
-        logoLink.addEventListener('click', (e) => { e.preventDefault(); showHome(); });
+        headerLogo.addEventListener('click', (e) => { e.preventDefault(); showHome(); });
 
-        // --- Details開閉状態の保存 ---
+        // detailsの開閉状態を保存
         const detailsElements = document.querySelectorAll('.section-details');
         detailsElements.forEach(d => {
             const id = d.id; const saved = localStorage.getItem(id);
@@ -348,41 +360,70 @@
             d.addEventListener('toggle', () => { localStorage.setItem(id, d.open); });
         });
 
-        // --- コピー機能 ---
-        function copyText(text, btn) {
+        // テキストコピー機能
+        window.copyText = function(text, btn) {
             navigator.clipboard.writeText(text).then(() => {
-                const o = btn.innerText; btn.innerText = "コピー完了！"; btn.style.backgroundColor = "#28a745";
-                setTimeout(() => { btn.innerText = o; btn.style.backgroundColor = ""; }, 1500);
+                const originalText = btn.innerText; 
+                btn.innerText = "コピー完了！"; 
+                btn.style.backgroundColor = "#28a745";
+                btn.style.color = "#fff";
+                setTimeout(() => { 
+                    btn.innerText = originalText; 
+                    btn.style.backgroundColor = ""; 
+                    btn.style.color = "";
+                }, 1500);
             });
         }
 
-        // --- サーバーステータス取得 ---
+        // プレイヤーリストのトグル
         const toggleBtn = document.getElementById('toggle-players-btn');
         const playerList = document.getElementById('player-list');
         toggleBtn.addEventListener('click', () => {
-            if (playerList.style.display === 'none' || playerList.style.display === '') { playerList.style.display = 'flex'; toggleBtn.innerText = 'プレイヤー名を隠す'; }
-            else { playerList.style.display = 'none'; toggleBtn.innerText = 'プレイヤー名を見る'; }
+            if (playerList.style.display === 'none' || playerList.style.display === '') { 
+                playerList.style.display = 'flex'; toggleBtn.innerText = 'プレイヤー名を隠す'; 
+            } else { 
+                playerList.style.display = 'none'; toggleBtn.innerText = 'プレイヤー名を見る'; 
+            }
         });
 
-        // 村鯖のアドレスに更新
+        // Minecraft サーバーステータスの取得
         const apiUrl = `https://api.mcstatus.io/v2/status/java/village-s.ddns.net`;
         function fetchStatus() {
             fetch(apiUrl).then(res => res.json()).then(data => {
                 const countElement = document.getElementById('online-count');
                 const maxElement = document.getElementById('max-count');
                 if (data.online) {
-                    countElement.innerText = data.players.online; maxElement.innerText = data.players.max;
-                    if (data.players.online > 0) toggleBtn.style.display = 'inline-block';
-                    else toggleBtn.style.display = 'none';
+                    countElement.innerText = data.players.online; 
+                    countElement.style.color = "#28a745";
+                    maxElement.innerText = data.players.max;
+                    if (data.players.online > 0) {
+                        toggleBtn.style.display = 'inline-block';
+                    } else {
+                        toggleBtn.style.display = 'none';
+                        playerList.style.display = 'none';
+                    }
                     
                     playerList.innerHTML = '';
                     if (data.players.list && data.players.list.length > 0) {
-                        data.players.list.forEach(p => { const li = document.createElement('li'); li.innerText = p.name_clean || p.name; playerList.appendChild(li); });
+                        data.players.list.forEach(p => { 
+                            const li = document.createElement('li'); 
+                            li.innerText = p.name_clean || p.name; 
+                            playerList.appendChild(li); 
+                        });
                     }
-                } else { countElement.innerText = 'オフライン'; countElement.style.color = '#dc3545'; toggleBtn.style.display = 'none'; }
-            }).catch(() => { document.getElementById('online-count').innerText = '取得エラー'; toggleBtn.style.display = 'none'; });
+                } else { 
+                    countElement.innerText = 'オフライン'; 
+                    countElement.style.color = '#dc3545';
+                    toggleBtn.style.display = 'none';
+                }
+            }).catch(() => { 
+                document.getElementById('online-count').innerText = '取得エラー'; 
+                document.getElementById('online-count').style.color = '#dc3545';
+            });
         }
-        fetchStatus(); setInterval(fetchStatus, 30000); 
+        
+        fetchStatus(); 
+        setInterval(fetchStatus, 60000); // サーバー負荷軽減のため更新頻度を1分に調整
     </script>
 </body>
 </html>
